@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "@arkweid/lefthook": "^0.7.7",
+    "prettier": "^3.8.1"
+  }
+}

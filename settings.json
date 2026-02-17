@@ -1,0 +1,20 @@
+{
+    "eslint.workingDirectories": [
+        {
+            "directory": "wm-rajar-ms_writer\\BACK",
+            "changeProcessCWD": true
+        },
+        {
+            "directory": "wm-rajar-ms_writer\\FRONT",
+            "changeProcessCWD": true
+        },
+        {
+            "directory": "wn-rajar-ms_reader\\Backend",
+            "changeProcessCWD": true
+        },
+        {
+            "directory": "wn-rajar-ms_reader\\Frontend",
+            "changeProcessCWD": true
+        }
+    ]
+}
