@@ -1,7 +1,6 @@
 import { CategoryService } from "../../services/category.service";
 import { ValidationError } from "../../errors/ValidationError";
 
-// Mock du repository
 jest.mock('../../repository/category.repository', () => ({
   categoryRepository: {
     findById: jest.fn(),
