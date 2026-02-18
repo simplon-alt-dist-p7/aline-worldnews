@@ -5,7 +5,6 @@
 module.exports = {
   preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
-  setupFilesAfterEnv: ['<rootDir>/src/tests/setup_db_test.ts'],
   extensionsToTreatAsEsm: ['.ts'],
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',

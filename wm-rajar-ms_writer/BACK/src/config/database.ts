@@ -3,12 +3,7 @@ import * as  dotenv from 'dotenv';
 import { Article } from '../models/article.model.js';
 import { Category } from '../models/category.model.js';
 
-// Charger .env.test si NODE_ENV=test, sinon .env
-if (process.env.NODE_ENV === 'test') {
-  dotenv.config({ path: '.env.test' });
-} else {
   dotenv.config();
-}
 
 // Validation des variables d'environnement obligatoires
 const requiredEnvVars = [
@@ -36,7 +31,7 @@ export const AppDataSource = new DataSource({
   entities: [Article, Category],
 
   // Synchronisation automatique des schémas (⚠️ DANGER en production)
-  synchronize: process.env.NODE_ENV === 'test', // Toujours false, utilisez les migrations !
+  synchronize: false, // Toujours false, utilisez les migrations !
 
   // Logs des requêtes SQL générées
   logging: true,
