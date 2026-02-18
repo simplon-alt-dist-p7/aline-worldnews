@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Article } from './article.model';
+import { Article } from './article.model.js';
 
 @Entity({ name: 't_categories', schema: 'writer' })
 export class Category {

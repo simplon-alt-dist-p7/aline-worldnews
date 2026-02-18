@@ -1,7 +1,7 @@
-import { categoryRepository } from '../repository/category.repository';
-import { Category } from '../models/category.model';
-import { ValidationError } from '../errors/ValidationError';
-import { NotFoundError } from '../errors/NotFoundError';
+import { categoryRepository } from '../repository/category.repository.js';
+import { Category } from '../models/category.model.js';
+import { ValidationError } from '../errors/ValidationError.js';
+import { NotFoundError } from '../errors/NotFoundError.js';
 
 export class CategoryService {
 

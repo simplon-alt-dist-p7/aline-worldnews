@@ -1,5 +1,5 @@
-import { AppDataSource } from '../config/database';
-import { Category } from '../models/category.model';
+import { AppDataSource } from '../config/database.js';
+import { Category } from '../models/category.model.js';
 import { Repository } from 'typeorm';
 
 class CategoryRepository {

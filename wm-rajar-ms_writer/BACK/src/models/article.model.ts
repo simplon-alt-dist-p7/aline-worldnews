@@ -7,7 +7,7 @@ import {
   DeleteDateColumn,
   Unique,
 } from 'typeorm';
-import { Category } from './category.model';
+import { Category } from './category.model.js';
 
 @Entity({ name: 't_articles', schema: 'writer' })
 @Unique(['title', 'publish_date'])

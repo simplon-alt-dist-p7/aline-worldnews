@@ -1,9 +1,14 @@
 import { DataSource } from 'typeorm';
-import dotenv from 'dotenv';
-import { Article } from '../models/article.model';
-import { Category } from '../models/category.model';
+import * as  dotenv from 'dotenv';
+import { Article } from '../models/article.model.js';
+import { Category } from '../models/category.model.js';
 
-dotenv.config();
+// Charger .env.test si NODE_ENV=test, sinon .env
+if (process.env.NODE_ENV === 'test') {
+  dotenv.config({ path: '.env.test' });
+} else {
+  dotenv.config();
+}
 
 // Validation des variables d'environnement obligatoires
 const requiredEnvVars = [
@@ -31,7 +36,7 @@ export const AppDataSource = new DataSource({
   entities: [Article, Category],
 
   // Synchronisation automatique des schémas (⚠️ DANGER en production)
-  synchronize: false, // Toujours false, utilisez les migrations !
+  synchronize: process.env.NODE_ENV === 'test', // Toujours false, utilisez les migrations !
 
   // Logs des requêtes SQL générées
   logging: true,
@@ -50,7 +55,11 @@ export const connectDB = async (): Promise<void> => {
     console.log('✅ TypeORM connecté à PostgreSQL avec succès');
   } catch (error) {
     console.error('❌ Erreur de connexion TypeORM:', error);
-    process.exit(1);
+      if (process.env.NODE_ENV !== 'test') {
+      process.exit(1);
+    } else {
+      throw error;
+    }
   }
 };
 

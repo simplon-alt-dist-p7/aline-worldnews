@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { categoryService } from '../services/category.service';
+import { categoryService } from '../services/category.service.js';
 
 class CategoryController {
   private parseId(param?: string | string[]): number | null {

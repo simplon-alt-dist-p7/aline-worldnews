@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
-import { AppDataSource } from '../config/database';
-import { Article } from '../models/article.model';
+import { AppDataSource } from '../config/database.js';
+import { Article } from '../models/article.model.js';
 
 // recherche d'articles par mot-clé dans le titre, le sous-titre, le chapeau ou le corps
 export const searchArticles = async (req: Request, res: Response, next: NextFunction) => {

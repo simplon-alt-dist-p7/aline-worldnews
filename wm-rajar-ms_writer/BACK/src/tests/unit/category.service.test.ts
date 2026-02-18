@@ -1,5 +1,5 @@
-import { CategoryService } from "../../services/category.service";
-import { ValidationError } from "../../errors/ValidationError";
+import { CategoryService } from "../../services/category.service.js";
+import { ValidationError } from "../../errors/ValidationError.js";
 
 jest.mock('../../repository/category.repository', () => ({
   categoryRepository: {

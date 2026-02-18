@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
-import { AppDataSource } from '../config/database';
-import { Category } from '../models/category.model';
+import { AppDataSource } from '../config/database.js';
+import { Category } from '../models/category.model.js';
 
 export const getAllCategories = async (req: Request, res: Response, next: NextFunction) => {
   try {

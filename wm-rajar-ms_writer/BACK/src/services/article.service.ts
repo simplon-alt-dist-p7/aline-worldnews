@@ -1,9 +1,9 @@
 // services/article.service.ts
-import { articleRepository } from '../repository/article.repository';
-import { Article } from '../models/article.model';
-import type { CreateArticleDTO, UpdateArticleDTO } from '../types/article.types';
-import { ValidationError } from '../errors/ValidationError';
-import { ConflictError } from '../errors/ConflictError';
+import { articleRepository } from '../repository/article.repository.js';
+import { Article } from '../models/article.model.js';
+import type { CreateArticleDTO, UpdateArticleDTO } from '../types/article.types.js';
+import { ValidationError } from '../errors/ValidationError.js';
+import { ConflictError } from '../errors/ConflictError.js';
 
 export class ArticleService {
   async getArticleById(id: number): Promise<Article | null> {

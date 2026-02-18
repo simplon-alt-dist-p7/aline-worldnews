@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 import { UnprocessableError } from '../errors/UnprocessableError.js';
 import { ValidationError } from '../errors/ValidationError.js';
 import { RateLimitError } from '../errors/RateLimitError.js';

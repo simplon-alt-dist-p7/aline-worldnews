@@ -1,15 +1,15 @@
 import 'reflect-metadata';
-import express from 'express';
+import express, { type Express } from 'express';
 import type { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { connectDB } from './config/database';
-import routes from './routes/index';
-import { errorHandler } from './middleware/errorHandler';
+import { connectDB } from './config/database.js';
+import routes from './routes/index.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
 
-const app = express();
+const app: Express = express();
 const PORT = process.env.PORT;
 
 // Configuration CORS
@@ -37,6 +37,8 @@ app.get('/', (req: Request, res: Response) => {
 app.use(errorHandler);
 
 const startServer = async () => {
+  if (process.env.NODE_ENV === 'test') return; // Ne rien faire pendant les tests
+
   try {
     await connectDB();
     app.listen(PORT, () => {
@@ -49,3 +51,5 @@ const startServer = async () => {
 };
 
 startServer();
+
+export { app };

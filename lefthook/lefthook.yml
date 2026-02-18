@@ -11,7 +11,6 @@ pre-commit:
       run: npx prettier --write "wn-rajar-ms_reader/Frontend/src/**/*.{ts,tsx,js,jsx,json,css,scss,md}"
 
 pre-push:
-  parallel: true
   commands:
     run-tests:
       run: node run-tests.js

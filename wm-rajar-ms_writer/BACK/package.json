@@ -18,7 +18,8 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "jest --config jest.config.cjs --watchAll",
+    "test": "cross-env NODE_ENV=test jest --config jest.config.cjs --detectOpenHandles --forceExit",
+    "test:watch": "cross-env NODE_ENV=test jest --config jest.config.cjs --watchAll",
     "seed": "tsx src/seeds/article.seed.ts"
   },
   "dependencies": {
@@ -40,6 +41,7 @@
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.50.0",
     "@typescript-eslint/parser": "^8.50.0",
+    "cross-env": "^10.1.0",
     "eslint": "^9.39.2",
     "jest": "^30.2.0",
     "supertest": "^7.2.2",

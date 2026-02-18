@@ -1,7 +1,7 @@
-import { AppDataSource } from '../config/database';
-import { Article } from '../models/article.model';
-import { Repository } from 'typeorm';
-import type { CreateArticleDTO } from '../types/article.types';
+import { AppDataSource } from '../config/database.js';
+import { Article } from '../models/article.model.js';
+import type { Repository } from 'typeorm';
+import type { CreateArticleDTO } from '../types/article.types.js';
 
 class ArticleRepository {
   private repository: Repository<Article>;

@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
-import { articleService } from '../services/article.service';
-import type { CreateArticleDTO, UpdateArticleDTO } from '../types/article.types';
+import { articleService } from '../services/article.service.js';
+import type { CreateArticleDTO, UpdateArticleDTO } from '../types/article.types.js';
 
 class ArticleController {
   async createArticle(req: Request, res: Response, next: NextFunction): Promise<void> {

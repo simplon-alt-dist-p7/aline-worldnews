@@ -8,11 +8,14 @@
     "emitDecoratorMetadata": true,
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "ESNext",
+    "module": "NodeNext",
     "target": "ES2022",
+    "esModuleInterop": true,
+    "moduleResolution": "NodeNext",
+    "resolveJsonModule": true,
     "types": [
       "node",
-      "jest",
+      "jest"
     ],
     // For nodejs:
     // "lib": ["esnext"],
@@ -40,5 +43,8 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
 }

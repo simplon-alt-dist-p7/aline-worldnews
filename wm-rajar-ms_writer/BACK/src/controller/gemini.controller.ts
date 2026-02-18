@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { geminiService } from '../services/gemini.service';
+import { geminiService } from '../services/gemini.service.js';
 
 class GeminiController {
   async generateTitle(req: Request, res: Response, next: NextFunction): Promise<void> {

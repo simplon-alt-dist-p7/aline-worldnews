@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
-import { AppDataSource } from '../config/database';
-import { Article } from '../models/article.model';
+import { AppDataSource } from '../config/database.js';
+import { Article } from '../models/article.model.js';
 
 export const getAllArticles = async (req: Request, res: Response, next: NextFunction) => {
   try {

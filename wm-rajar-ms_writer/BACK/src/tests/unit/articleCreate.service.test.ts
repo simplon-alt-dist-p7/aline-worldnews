@@ -1,5 +1,5 @@
-import { ArticleService } from '../../services/article.service';
-import { articleRepository } from '../../repository/article.repository';
+import { ArticleService } from '../../services/article.service.js';
+import { articleRepository } from '../../repository/article.repository.js';
 
 jest.mock('../../repository/article.repository', () => ({
   articleRepository: {
