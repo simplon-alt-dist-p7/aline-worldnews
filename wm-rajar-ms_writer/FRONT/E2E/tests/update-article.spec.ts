@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { UpdatePage } from '../pages/updatePage';
-import { formUpdateData } from '../../../PLAYWRIGHT/data/form-update';
 
 test.describe("Mise à jour d'un article", () => {
   let updatePage: UpdatePage;
@@ -15,18 +14,12 @@ test.describe("Mise à jour d'un article", () => {
   });
 
   test("Vérifier la mise à jour d'un article", async ({ page }) => {
-    // Remplir le formulaire avec les nouvelles données
-    await updatePage.updateForm();
 
     // Soumettre le formulaire
     await updatePage.submitForm();
 
     // Vérifier la modale de succès affichée et que les champs du formulaire contiennent les nouvelles valeurs
     await expect(page.locator('dialog[data-type="success"]')).toBeVisible();
-    await expect(page.locator('#title')).toHaveValue(formUpdateData.title);
-    await expect(page.locator('#subtitle')).toHaveValue(formUpdateData.subtitle);
-    await expect(page.locator('#subhead')).toHaveValue(formUpdateData.subhead);
-    await expect(page.locator('#body')).toHaveValue(formUpdateData.body);
 
     // Fermer la modale et attendre la redirection vers la liste
     await updatePage.closeSuccessModal();

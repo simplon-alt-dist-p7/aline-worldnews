@@ -1,4 +1,4 @@
-import { Page, expect, test } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 
 export class ArticlesPage {
     constructor(private page: Page) {}
