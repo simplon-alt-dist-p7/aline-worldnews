@@ -3,7 +3,14 @@ import * as  dotenv from 'dotenv';
 import { Article } from '../models/article.model.js';
 import { Category } from '../models/category.model.js';
 
-  dotenv.config();
+const env = process.env.NODE_ENV;
+
+if (env === 'test') {
+  dotenv.config({ path: '.env.test' });
+} else {
+  dotenv.config(); 
+}
+
 
 // Validation des variables d'environnement obligatoires
 const requiredEnvVars = [
@@ -25,7 +32,9 @@ export const AppDataSource = new DataSource({
   port: Number(process.env.DB_PORT),
   database: process.env.DB_NAME!,
   username: process.env.DB_USER!,
-  password: process.env.DB_PASSWORD || '', // Utilisez une chaîne vide si DB_PASSWORD n'est pas défini
+  password: process.env.DB_PASSWORD || '', 
+
+  ...(process.env.NODE_ENV === 'test' ? { schema: 'writer' } : {}),
 
   // Liste de toutes vos entities
   entities: [Article, Category],
