@@ -96,16 +96,6 @@ Les frontends sont alignés sur les choix techniques de leur backend respectif.
 
 ---
 
-## 🧪 Stratégie de tests
-
-Le projet repose sur une stratégie de tests :
-
-- Tests unitaires
-- Tests d’intégration
-- Tests End-to-End (E2E)
-
----
-
 ## 🧩 Jest — Tests unitaires
 
 Utilisé dans les backends et frontends
@@ -136,6 +126,44 @@ Les tests d’intégration interagissent avec la base de données.
 
 ---
 
+## 🗄️ Base de données de test
+
+Chaque backend (Writer/Reader) utilise une **base de données dédiée aux tests**.  
+
+- Les tests unitaires n’interagissent généralement pas avec la base, ils se basent sur des mocks.  
+- Les tests d’intégration utilisent **Supertest** et parcourent tout le chemin de la requête jusqu’à la base.  
+
+### Configuration
+
+La BDD de test est contenue dans un conteneur dédié, défini dans le `docker-compose.test.yml` à la racine.
+
+### Fichier `.env.test` et configuration
+
+Le fichier `.env.test` contient les variables spécifiques à la BDD de test (`DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, etc.).
+
+### Writer – TypeORM
+
+Dans `database.ts`, `.env.test` est chargé automatiquement lorsque `NODE_ENV=test` est défini.  
+La variable `NODE_ENV=test` est définie de manière **portable** via `cross-env` dans les scripts du `package.json` :  
+
+### Reader – Prisma (à venir)
+
+Le client Prisma existant se trouve dans `src/lib/prisma.js`.  
+Ce fichier est adapté pour charger `.env.test` lorsque `NODE_ENV=test`. 
+
+### Commandes utiles
+
+```bash
+# Lancer la BDD de test
+docker-compose -f docker-compose.test.yml up --build
+
+# Arrêter la BDD de test
+docker-compose -f docker-compose.test.yml down
+
+# Arrêter et supprimer les données de la BDD test (supression du volumes)
+docker-compose -f docker-compose.test.yml down -v
+```
+
 ## 🎭 Playwright — Tests End-to-End
 
 Présent dans chaque frontend pour valider le comportement réel de l’application du point de vue utilisateur.
@@ -158,24 +186,81 @@ Il est possible d'installer playwright à la base du projet. Cependant, il y a 2
 Ce choix peut-être judicieux pour un déploiement automatisé, car il facilite le lancement des tests e2e globaux. 
 Cependant j'ai fais le choix d'installer playwright dans les 2 fronts séparément, là encore pour me faciliter la configuration et les tests.
 
-Commandes pour lancer les tests : 
+## ⚡ Commandes pour lancer les tests : 
 
-#### Lancer tous les tests
-```npx playwright test```
-#### Mode watch pour développement rapide
+Chaque microservice/front possède son propre dossier et sa propre configuration.  
+
+💡 **À savoir :**  
+- Pour les **tests unitaires et d’intégration**, il faut se placer dans le dossier du back correspondant.  
+
+#### Lancer tous les tests unitaires et intégrations depuis un service
+```bash 
+npm test
+```
+
+- Le fichier **run-tests.js** à la racine permet de :  
+  - itérer automatiquement sur **tous les services** (Writer/Reader, Front/Back)  
+  - lancer **unitaires et intégration** en un seul endroit  
+  - garantir que chaque test est exécuté dans le bon dossier avec la bonne configuration 
+
+#### Lancer tous les tests unitaires et intégrations depuis la racine du projet
+```bash 
+node run-tests.js
+```
+
+
+💡 **À savoir :**  
+Les scripts de tests utilisent `cross-env` pour définir la variable `NODE_ENV=test` de manière portable.  
+Cela garantit que les tests d’intégration se connectent à la **BDD de test**, peu importe le système d’exploitation.
+
+
+💡 **À savoir :**  
+Il est possible de lancer les tests **unitaires** et **d’intégration** séparément.  
+Pour cela, il faut configurer chaque backend avec **deux scripts distincts** dans le `package.json` (fichiers de config à créer):  
+
+```json
+{
+  "scripts": {
+    "test:unit": "jest --config jest.unit.config.js",
+    "test:integration": "jest --config
+    jest.integration.config.js"
+  }
+}
+```
+
+Ensuite de lancer :
+
+```bash 
+npm run test:unit
+npm run test:integration
+```
+
+### Playwright - configuration des commandes dans le package.json de chaque front
+
+```bash
+#Lancer tous les tests
+npx playwright test
+
+#Mode watch pour développement rapide
 ```npx playwright test --watch```
-#### Interface graphique pour visualiser les tests
+
+#Interface graphique pour visualiser les tests
 ```npx playwright test --ui```
-#### Debugger étape par étape
+
+#Debugger étape par étape
 ```npx playwright test --debug```
-#### Ouvrir le rapport HTML
+
+#Ouvrir le rapport HTML
 ```npx playwright show-report```
-#### Lancer avec navigateur visible
+
+#Lancer avec navigateur visible
 ```npx playwright test --headed```
-#### Lancer un test spécifique
+
+#Lancer un test spécifique
 ```npx playwright test E2E/main-articles.spec.ts```
- 
+```
 ---
+
 ## 🐳 Conteneurisation Docker
 
 Docker est utilisé pour uniformiser l’environnement de développement et simplifier le déploiement, que ce soit en local ou dans CI/CD.
@@ -202,6 +287,24 @@ A titre d'exemple, on y trouve :
 - ```EXPOSE``` – indique le port sur lequel l’application écoute. (ex: 3000)
 - ```CMD``` – commande qui démarre l’application quand le conteneur se lance. (ex: npm, start)
 
+💡 **À savoir :** 
+
+Le dossier `dist/` présent dans writer/back contient le code compilé du backend TypeScript.
+
+- TypeScript est utilisé pour développer le backend (`.ts`) mais Node.js ne peut exécuter que du `.js`.
+- Le script `"build": "tsc"` (package.json) compile le code source depuis `src/` vers `dist/`.
+
+---> **Dans Dockerfile :**
+
+- `RUN npm run build`  
+  - Compile le TypeScript en JavaScript **au moment de construire l’image**.  
+  - Résultat : le dossier `dist/` est créé **dans l’image** et prêt à être exécuté.
+
+- `CMD ["npm", "start"]`  
+  - Lance le serveur Node.js **quand le conteneur tourne**.  
+  - Ici, il exécute `node dist/index.js`, donc le code déjà compilé.
+
+
 ### Docker Compose à la racine
 - **Docker Compose rassemble tous les services** (fronts, back, bases de données) dans un seul fichier.  
 - Définit les **ports exposés** et les **réseaux internes**, pour que les services puissent communiquer facilement entre eux.  
@@ -214,7 +317,48 @@ A titre d'exemple, on y trouve :
 - `docker-compose up` : démarre tous les conteneurs déjà construit
 - `docker-compose down`: arrêter et supprimer les conteneurs
 
-## 🗄️ Base de données de test
+###  Exemples des conteneurs, images et ports dans ce projet
+
+| Conteneur | Image | Port conteneur | Port exposé sur machine | Rôle |
+|-----------|-------|----------------|------------------------|------|
+| `db-test` | `postgres:15` | 5432 | 5433 | Base de test. Postgres écoute sur 5432 dans le conteneur, exposé sur 5433 pour éviter un conflit avec la DB principale. |
+| `db` | `postgres:15` | 5432 | 5432 | Base principale, accessible directement sur 5432. |
+| `reader-front` | `aline-worldnews-reader-front` | 5175 | 5175 | Frontend reader |
+| `writer-front` | `aline-worldnews-writer-front` | 5174 | 5174 | Frontend writer|
+| `writer-back` | `aline-worldnews-writer-back` | 5000 | 5000 | Backend writer|
+| `reader-back` | `aline-worldnews-reader-back` | 5001 | 5001 | Backend reader|
+
+💡 **Explications**  
+
+- Les **ports internes** (colonne “Port conteneur”) correspondent à ce que le service écoute **dans le conteneur**.  
+- Les **ports exposés en local** (colonne “Port exposé sur machine”) permettent de se connecter depuis le PC.  
+- Pour la DB de test, le port en local est différent (`5433`) pour éviter tout conflit avec la DB principale (`5432`).  
+- Tous les autres services gardent le même port interne et externe car ils n’entrent pas en conflit entre eux étant donné qu'ils sont sur des images différentes.
+
+Ici, je n'ai pas de PORTS en local pour les back et front. Mais on pourrait très bien les rajouter soit : 
+- en exposant un port différent sur mon pc dans Docker Compose
+
+Exemple : 5176:5174 → le PC peut se connecte sur localhost:5176, et Docker redirige vers 5174 dans le conteneur
+
+- en modifiant tle front pour écouter directement sur un port local quand je ne passe pas par Docker
+
+Exemple : process.env.LOCAL_PORT = 5176 → npm start en local ouvre ce port
+
+---
+
+###  Volumes Docker
+
+Les **volumes** servent à stocker les données de façon persistante, même si un conteneur est supprimé ou reconstruit.  
+
+Exemples de volumes utilisés dans ce projet :  
+
+- `aline-worldnews_pgdata`  contient les données des bases Postgres associées au projet `aline-worldnews`.  
+
+
+
+---
+
+
 
 Les tests d’intégration et E2E interagissent avec la base de données. Pour **ne pas altérer les données réelles**, une **BDD dédiée aux tests** est utilisée.  
 
