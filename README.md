@@ -39,7 +39,7 @@ Cela permet un développement, un déploiement et des tests totalement indépend
 
 ---
 
-## 📁 Architecture générale
+## 📁Architecture générale
 
 ```
 aline-worldnews/
@@ -84,7 +84,7 @@ aline-worldnews/
 ```
 
 
-## 🗄 Base de données
+## 🗄Base de données
 
 Les dossiers `BDD/` sont présents dans Writer et Reader.
 
@@ -96,7 +96,7 @@ Ce choix a été fait pour :
 
  ---
 
-## ⚙️ Choix techniques transverses
+## ⚙️Choix techniques transverses
 
 Les microservices **Writer** et **Reader** utilisent des stacks différentes (voir README propres à chaque projet).
 
@@ -111,7 +111,7 @@ Les frontends sont alignés sur les choix techniques de leur backend respectif.
 
 ---
 
-## 🪝 Git Hook automatisé : Lefthook
+## 🪝Git Hook automatisé : Lefthook
 
 Lefthook permet d’exécuter automatiquement des tâches avant un commit ou un push. L'objectif est de maintenir la qualité du code et éviter de pousser des erreurs ou du code mal formaté.
 
@@ -141,7 +141,7 @@ Prettier est utilisé pour uniformiser le style du code (indentation, quotes, fi
 La configuration est présente à la racine du projet dans ``prettier.config.js``
 
 
-## 🧩 Jest — Tests unitaires
+## 🧩Jest — Tests unitaires
 
 Utilisé dans les backends et frontends
 
@@ -155,7 +155,7 @@ Les dépendances externes (services, base de données, modules) sont mockées po
 
 ---
 
-## 🌐 Supertest — Tests d’intégration API
+## 🌐Supertest — Tests d’intégration API
 
 Utilisé pour tester les routes HTTP et l’intégration complète des composants backend, depuis la requête jusqu’à la base de données. (route, controller, accès à la base, réponse envoyée)
 
@@ -171,7 +171,7 @@ Les tests d’intégration interagissent avec la base de données.
 
 ---
 
-## 🗄️ Base de données de test
+## 🗄️Base de données de test
 
 Chaque backend (Writer/Reader) utilise une **base de données dédiée aux tests**.  
 
@@ -209,7 +209,7 @@ docker-compose -f docker-compose.test.yml down
 docker-compose -f docker-compose.test.yml down -v
 ```
 
-## 🎭 Playwright — Tests End-to-End
+## 🎭Playwright — Tests End-to-End
 
 Présent dans chaque frontend pour valider le comportement réel de l’application du point de vue utilisateur.
 J’ai choisi Playwright car c’est un outil que j'utilise déjà en entreprise, ce qui m’a permis de ne pas m’éparpiller et de me concentrer sur la configuration et le déploiement.
@@ -231,7 +231,7 @@ Il est possible d'installer playwright à la base du projet. Cependant, il y a 2
 Ce choix peut-être judicieux pour un déploiement automatisé, car il facilite le lancement des tests e2e globaux. 
 Cependant j'ai fais le choix d'installer playwright dans les 2 fronts séparément, là encore pour me faciliter la configuration et les tests.
 
-## ⚡ Commandes pour lancer les tests : 
+## ⚡Commandes pour lancer les tests : 
 
 Chaque microservice/front possède son propre dossier et sa propre configuration.  
 
@@ -306,7 +306,7 @@ npx playwright test
 ```
 ---
 
-## 🐳 Conteneurisation Docker
+## 🐳Conteneurisation Docker
 
 Docker est utilisé pour uniformiser l’environnement de développement et simplifier le déploiement, que ce soit en local ou dans CI/CD.
 
