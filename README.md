@@ -15,12 +15,30 @@ Cela permet un développement, un déploiement et des tests totalement indépend
 
 ---
 
+## 📑 Sommaire
+
+- [README des sous-projets](#🔗-readme-des-sous-projets)
+- [Architecture générale](#📁-architecture-générale)
+- [Base de données](#🗄-base-de-données)
+- [Choix techniques transverses](#⚙️-choix-techniques-transverses)
+- [Git Hook automatisé : Lefthook](#🪝-git-hook-automatisé-lefthook)
+- [ESLint](#eslint)
+- [Prettier](#prettier)
+- [Jest — Tests unitaires](#🧩-jest-—-tests-unitaires)
+- [Supertest — Tests d’intégration API](#🌐-supertest-—-tests-dintégration-api)
+- [Base de données de test](#🗄️-base-de-données-de-test)
+- [Playwright — Tests End-to-End](#🎭-playwright-—-tests-end-to-end)
+- [Conteneurisation Docker](#🐳-conteneurisation-docker)
+- [Volumes Docker](#-volumes-docker)
+- [Intégration continue avec Github Actions](#intégration-continue-avec-github-actions)
+- [Déploiement](#déploiement)
+
+---
+
 ### 🔗 README des sous-projets
 
-- Writer – Frontend : `./wm-rajar-ms_writer/FRONT/README.md`
-- Writer – Backend : `./wm-rajar-ms_writer/BACK/README.md`
-- Reader – Frontend : `./wn-rajar-ms_reader/Frontend/README.md`
-- Reader – Backend : `./wn-rajar-ms_reader/Backend/README.md`
+- [Writer]  (https://github.com/simplon-alt-dist-p7/wm-rajar-ms_writer)
+- [Reader]  (https://github.com/simplon-alt-dist-p7/wn-rajar-ms_reader)
 
 ---
 
@@ -384,36 +402,14 @@ Exemples de volumes utilisés dans ce projet :
 
 - `aline-worldnews_pgdata`  contient les données des bases Postgres associées au projet `aline-worldnews`.  
 
+---
 
+## Intégration continue avec Github Actions
+
+(A faire)
 
 ---
 
+## Déploiement
 
-
-Les tests d’intégration et E2E interagissent avec la base de données. Pour **ne pas altérer les données réelles**, une **BDD dédiée aux tests** est utilisée.  
-
-#### Configuration Docker
-La BDD de test est contenue dans un conteneur dédié, défini dans le `docker-compose.test.yml` à la racine.
-
-#### Fichier `.env.test` et configuration 
-
-- Le fichier `.env.test` contient les variables spécifiques à la BDD de test (`DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, etc.).  
-
-#### TypeORM (writer)
-
-Dans `database.ts`, `.env.test` est chargé automatiquement lorsque `NODE_ENV=test` est défini.
-
-Cela permet aux tests d’utiliser le schema writer de test sans toucher aux données réelles.
-
-#### Prisma (reader)
-
-Le client Prisma existant est dans `src/lib/prisma.js`.
-
-On adapte ce fichier pour charger `.env.test` lorsque `NODE_ENV=test`, ce qui permet aux tests de se connecter à la BDD test sans modifier les données réelles.
-
-
-- Commandes utiles :  
-
-```bash
-docker-compose -f docker-compose.test.yml up --build
-docker-compose -f docker-compose.test.yml down
+(A faire)
