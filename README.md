@@ -96,6 +96,36 @@ Les frontends sont alignés sur les choix techniques de leur backend respectif.
 
 ---
 
+## 🪝 Git Hook automatisé : Lefthook
+
+Lefthook permet d’exécuter automatiquement des tâches avant un commit ou un push. L'objectif est de maintenir la qualité du code et éviter de pousser des erreurs ou du code mal formaté.
+
+Contrairement à **husky** par exemple, il gère bien différentes stacks dans le même projet, et l'intégration CI/CD demande moins d'ajustement.
+
+Fichier de configuration : **lefthook.yml** 
+- pre-commit : avant chaque commit, Lefthook exécute Prettier sur tous les fichiers source de chaque service/front pour les formater automatiquement.
+
+- pre-push : avant chaque push, Lefthook lance tous les tests unitaires et d’intégration via run-tests.js. Cela évite de pousser du code cassé ou non testé.
+
+### ESlint ###
+
+Chaque microservice et front possède sa propre configuration ESLint (eslint.config.js) adaptée à sa stack. Pour que VSCode détecte correctement les configurations dans tous les sous-dossiers, le fichier settings.json à la racine indique les règles spécifiques de chaque configuration
+ESLint analyse le code pour détecter les erreurs, mauvaises pratiques et incohérences de style.
+
+- Présent dans tous les projets (back et front)
+- Intégré avec Lefthook pour bloquer les commits si des erreurs sont détectées
+- Configuration dans .eslintrc.js ou directement via package.json
+- Compatible avec TypeScript via 
+
+``@typescript-eslint/parser`` et ``@typescript-eslinteslint-plugin``
+
+### Prettier ###
+
+Prettier est utilisé pour uniformiser le style du code (indentation, quotes, fin de ligne…).
+
+La configuration est présente à la racine du projet dans ``prettier.config.js``
+
+
 ## 🧩 Jest — Tests unitaires
 
 Utilisé dans les backends et frontends
