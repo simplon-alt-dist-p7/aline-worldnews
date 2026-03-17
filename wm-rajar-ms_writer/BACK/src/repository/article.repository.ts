@@ -40,7 +40,7 @@ class ArticleRepository {
   }
 
   async update(id: number, data: Partial<Article>): Promise<Article | null> {
-    const { update_date, category, ...otherData } = data;
+    const { category, ...otherData } = data;
 
     const updateData: any = {
       ...otherData,
