@@ -21,21 +21,21 @@ Cela permet un développement, un déploiement et des tests totalement indépend
 - [Architecture générale](#architecture-générale)
 - [Base de données](#base-de-données)
 - [Choix techniques transverses](#choix-techniques-transverses)
-- [Git Hook automatisé : Lefthook](#git-hook-automatisé-lefthook)
-- [Jest — Tests unitaires](#jest-—-tests-unitaires)
-- [Supertest — Tests d’intégration API](#supertest-—-tests-dintégration-api)
+- [Hook Git - Lefthook](#hook-git---lefthook)
+- [Jest — Tests unitaires](#jest--tests-unitaires)
+- [Supertest - Tests d'intégration API](#supertest---tests-dintégration-api)
 - [Base de données de test](#base-de-données-de-test)
-- [Playwright — Tests End-to-End](#playwright-—-tests-end-to-end)
+- [Playwright — Tests End-to-End](#playwright--tests-end-to-end)
 - [Conteneurisation Docker](#conteneurisation-docker)
 - [Intégration continue avec Github Actions](#intégration-continue-avec-github-actions)
 - [Déploiement](#déploiement)
 
 ---
 
-### 🔗 README des sous-projets
+## 🔗README des sous-projets
 
-- [Writer]  (https://github.com/simplon-alt-dist-p7/wm-rajar-ms_writer)
-- [Reader]  (https://github.com/simplon-alt-dist-p7/wn-rajar-ms_reader)
+- [Writer](https://github.com/simplon-alt-dist-p7/wm-rajar-ms_writer)
+- [Reader](https://github.com/simplon-alt-dist-p7/wn-rajar-ms_reader)
 
 ---
 
@@ -96,7 +96,7 @@ Ce choix a été fait pour :
 
  ---
 
-## ⚙️Choix techniques transverses
+## 🔧Choix techniques transverses
 
 Les microservices **Writer** et **Reader** utilisent des stacks différentes (voir README propres à chaque projet).
 
@@ -111,7 +111,7 @@ Les frontends sont alignés sur les choix techniques de leur backend respectif.
 
 ---
 
-## 🪝Git Hook automatisé : Lefthook
+## 🪝Hook Git - Lefthook
 
 Lefthook permet d’exécuter automatiquement des tâches avant un commit ou un push. L'objectif est de maintenir la qualité du code et éviter de pousser des erreurs ou du code mal formaté.
 
@@ -141,7 +141,7 @@ Prettier est utilisé pour uniformiser le style du code (indentation, quotes, fi
 La configuration est présente à la racine du projet dans ``prettier.config.js``
 
 
-## 🧩Jest — Tests unitaires
+## 🧩Jest - Tests unitaires
 
 Utilisé dans les backends et frontends
 
@@ -155,7 +155,7 @@ Les dépendances externes (services, base de données, modules) sont mockées po
 
 ---
 
-## 🌐Supertest — Tests d’intégration API
+## 🌐Supertest - Tests d’intégration API
 
 Utilisé pour tester les routes HTTP et l’intégration complète des composants backend, depuis la requête jusqu’à la base de données. (route, controller, accès à la base, réponse envoyée)
 
@@ -191,10 +191,16 @@ Le fichier `.env.test` contient les variables spécifiques à la BDD de test (`D
 Dans `database.ts`, `.env.test` est chargé automatiquement lorsque `NODE_ENV=test` est défini.  
 La variable `NODE_ENV=test` est définie de manière **portable** via `cross-env` dans les scripts du `package.json` :  
 
-### Reader – Prisma (à venir)
+### Reader – Prisma 
 
 Le client Prisma existant se trouve dans `src/lib/prisma.js`.  
-Ce fichier est adapté pour charger `.env.test` lorsque `NODE_ENV=test`. 
+Ce fichier est adapté pour charger `.env.test` lorsque `NODE_ENV=test`,  
+de la même façon que `database.ts` côté Writer.
+
+Le fichier `.env.test` contient une `DATABASE_URL` complète (format imposé par Prisma) :  
+`DATABASE_URL=postgresql://user:password@localhost:5433/test_db`
+
+La variable `NODE_ENV=test` est définie via `cross-env` dans les scripts du `package.json`.
 
 ### Commandes utiles
 
@@ -209,7 +215,7 @@ docker-compose -f docker-compose.test.yml down
 docker-compose -f docker-compose.test.yml down -v
 ```
 
-## 🎭Playwright — Tests End-to-End
+## 🎭Playwright - Tests End-to-End
 
 Présent dans chaque frontend pour valider le comportement réel de l’application du point de vue utilisateur.
 J’ai choisi Playwright car c’est un outil que j'utilise déjà en entreprise, ce qui m’a permis de ne pas m’éparpiller et de me concentrer sur la configuration et le déploiement.

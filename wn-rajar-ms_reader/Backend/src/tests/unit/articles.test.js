@@ -19,6 +19,7 @@ describe('ArticlesService', () => {
 
   test('Return article', async () => {
     const result = await articlesService.getById(1);
+    console.log(result);
     expect(result).toHaveProperty('id'); 
     expect(result.body).toBe('Contenu de l\'article 1');
   });
@@ -26,6 +27,7 @@ describe('ArticlesService', () => {
   test('Article not found', async () => {
   prisma.article.findFirst.mockResolvedValueOnce(null); //ici on modifie le comportement du mock en null. 
   const result = await articlesService.getById(999);
+  console.log(result);
   expect(result).toBeNull();
   });
 });

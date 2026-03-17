@@ -12,8 +12,8 @@ describe('validate middleware', () => {
         const req = { params: { id: '1' } };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
         const next = jest.fn();
-
         validateId(req, res, next);
+        console.log(req.params)
 
         expect(next).toHaveBeenCalled();
         expect(req.params).toEqual({ id: 1 });
@@ -27,7 +27,7 @@ describe('validate middleware', () => {
         const next = jest.fn();
 
         validateId(req, res, next);
-
+        console.log(req.params)
         expect(next).not.toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(400);
     });

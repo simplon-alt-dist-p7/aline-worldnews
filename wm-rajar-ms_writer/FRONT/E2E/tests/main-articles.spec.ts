@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { ArticlesPage } from '../pages/articlesPage';
 
 test.describe('Page principale - Gestion des articles', () => {
-  let articlesPage: ArticlesPage;
+  let articlesPage: ArticlesPage; //on déclare la variable articlesPage pour l'utiliser dans tous les tests. d'où le "let" et pas "const"
 
   test.beforeEach(async ({ page }) => {
     articlesPage = new ArticlesPage(page);
@@ -37,7 +37,7 @@ test.describe('Page principale - Gestion des articles', () => {
 
   test('Naviguer vers la page 2 et revenir', async ({ page }) => {
     // Compter les articles sur la page 1
-    let articlesPage1 = await page.getByRole('article').count();
+    const articlesPage1 = await page.getByRole('article').count();
     expect(articlesPage1).toBeGreaterThan(0);
 
     // Cliquer sur le bouton "Page suivante"

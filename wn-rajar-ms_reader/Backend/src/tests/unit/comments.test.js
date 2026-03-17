@@ -18,7 +18,8 @@ describe('CommentsService', () => {
   });
 
   test('content most longer', async () => {
-    const longContent = 'commentaires'.repeat(1001);
+    const longContent = 'motarepeter'.repeat(1001);
+    console.log(longContent.length);
     await expect(
       commentsService.addCommentToArticle(1, { content: longContent })
     ).rejects.toThrow('Contenu trop long (max 1000 caractères)'); //il faut reprendre le message d'erreur du service sinon le test échouera
@@ -34,6 +35,7 @@ describe('CommentsService', () => {
   test('content valid', async () => {
     const validContent = 'Ceci est un commentaire valide.';
     const result = await commentsService.addCommentToArticle(3, { content: validContent }); 
+    console.log(result);
     expect(result).toHaveProperty('id'); // Vérifier que l'objet retourné a une propriété 'id'
     expect(result.content).toBe(validContent); // Vérifier que le contenu du commentaire est correct
   });
