@@ -43,7 +43,6 @@ services:
       - "5174:5174"
     depends_on:
       - writer-back
-    command: ["npx", "vite", "dev", "--host", "0.0.0.0", "--port", "5174"]
 
   reader-front:
     build: ./wn-rajar-ms_reader/Frontend
@@ -51,7 +50,6 @@ services:
       - "5175:5175"
     depends_on:
       - reader-back
-    command: ["npx", "vite", "dev", "--host", "0.0.0.0", "--port", "5175"]
 
 volumes:
   pgdata:
