@@ -14,7 +14,6 @@ test.describe("Mise à jour d'un article", () => {
   });
 
   test("Vérifier la mise à jour d'un article", async ({ page }) => {
-
     // Soumettre le formulaire
     await updatePage.submitForm();
 
