@@ -1,7 +1,6 @@
 import './CommentCount.css';
 
-function CommentCount({ count, showParentheses = false, hideText = false }) {
-  const CommentIcon = () => (
+const CommentIcon = () => (
     <svg
       className="comment-count__icon"
       width="14"
@@ -15,6 +14,8 @@ function CommentCount({ count, showParentheses = false, hideText = false }) {
     </svg>
   );
 
+function CommentCount({ count, showParentheses = false, hideText = false }) {
+  
   return (
     <span className="comment-count">
       {showParentheses ? '(' : ''}

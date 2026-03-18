@@ -24,17 +24,36 @@ on:
 jobs:
   reader-back:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd pg_isready #commande qui vérifie si Postgres accepte des connexions
+          --health-interval 2s #vérifie toutes les 2 secondes
+          --health-timeout 2s #chaque vérification a 2 secondes pour répondre
+          --health-retries 10 #si ça échoue 10 fois de suite, considère que Postgres n'a pas démarré
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5433/test_db
+      NODE_ENV: test
     defaults:
       run:
         working-directory: wn-rajar-ms_reader/Backend
     steps:
-      - uses: actions/checkout@v4 # récupère le code du repo sur la VM ubuntu. Sans ça, la machine démarre vide et ne sait pas quel code exécuter.
-      - uses: actions/setup-node@v4 # installe Node.js sur la VM. Sans ça, npm n'existe pas et rien ne fonctionne.
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           cache: 'npm'
           cache-dependency-path: wn-rajar-ms_reader/Backend/package-lock.json
       - run: npm ci
+      - run: npx prisma generate
+      - run: npx prisma migrate deploy
       - run: npm run lint
       - run: npm test
 
@@ -56,6 +75,31 @@ jobs:
 
   writer-back:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: worldnews
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 2s
+          --health-timeout 2s
+          --health-retries 10
+    env:
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_NAME: worldnews
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_SCHEMA: writer
+      PORT: 5000
+      NODE_ENV: test
+      GEMINI_API_KEY: dummy
+      FRONTEND_URL: http://localhost:5174
     defaults:
       run:
         working-directory: wm-rajar-ms_writer/BACK
