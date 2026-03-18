@@ -55,10 +55,10 @@ jobs:
       - run: npx prisma generate
       - name: Initialiser la base de données
         run: |
-          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../database/01-worldnews.sql
-          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../database/04-categories.sql
-          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../database/02-seed.sql
-          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../database/03-seed-comments.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/01-worldnews.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/04-categories.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/02-seed.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/03-seed-comments.sql
       - run: npm run lint
       - run: npm test
 
@@ -118,9 +118,9 @@ jobs:
       - run: npm ci
       - name: Initialiser la base de données
         run: |
-          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../database/01-worldnews.sql
-          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../database/04-categories.sql
-          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../database/02-seed.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/01-worldnews.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/04-categories.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/02-seed.sql
       - run: npm run lint
       - run: npm test
 
