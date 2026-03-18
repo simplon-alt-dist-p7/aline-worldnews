@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import * as  dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 import { Article } from '../models/article.model.js';
 import { Category } from '../models/category.model.js';
 
@@ -8,9 +8,8 @@ const env = process.env.NODE_ENV;
 if (env === 'test') {
   dotenv.config({ path: '.env.test' });
 } else {
-  dotenv.config(); 
+  dotenv.config();
 }
-
 
 // Validation des variables d'environnement obligatoires
 const requiredEnvVars = [
@@ -32,7 +31,7 @@ export const AppDataSource = new DataSource({
   port: Number(process.env.DB_PORT),
   database: process.env.DB_NAME!,
   username: process.env.DB_USER!,
-  password: process.env.DB_PASSWORD || '', 
+  password: process.env.DB_PASSWORD || '',
 
   ...(process.env.NODE_ENV === 'test' ? { schema: 'writer' } : {}),
 
@@ -40,7 +39,7 @@ export const AppDataSource = new DataSource({
   entities: [Article, Category],
 
   // Synchronisation automatique des schémas (⚠️ DANGER en production)
-  synchronize: false, // Toujours false, utilisez les migrations !
+  synchronize: process.env.NODE_ENV === 'test', // true en test, false en prod
 
   // Logs des requêtes SQL générées
   logging: true,
@@ -59,7 +58,7 @@ export const connectDB = async (): Promise<void> => {
     console.log('✅ TypeORM connecté à PostgreSQL avec succès');
   } catch (error) {
     console.error('❌ Erreur de connexion TypeORM:', error);
-      if (process.env.NODE_ENV !== 'test') {
+    if (process.env.NODE_ENV !== 'test') {
       process.exit(1);
     } else {
       throw error;

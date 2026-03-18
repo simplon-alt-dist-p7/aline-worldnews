@@ -34,10 +34,10 @@ jobs:
         ports:
           - 5433:5432
         options: >-
-          --health-cmd pg_isready #commande qui vérifie si Postgres accepte des connexions
-          --health-interval 2s #vérifie toutes les 2 secondes
-          --health-timeout 2s #chaque vérification a 2 secondes pour répondre
-          --health-retries 10 #si ça échoue 10 fois de suite, considère que Postgres n'a pas démarré
+          --health-cmd pg_isready 
+          --health-interval 2s 
+          --health-timeout 2s 
+          --health-retries 10
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5433/test_db
       NODE_ENV: test
@@ -53,7 +53,12 @@ jobs:
           cache-dependency-path: wn-rajar-ms_reader/Backend/package-lock.json
       - run: npm ci
       - run: npx prisma generate
-      - run: npx prisma migrate deploy
+      - name: Initialiser la base de données
+        run: |
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../wn-rajar-ms_reader/Db/02-worldnews.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../wn-rajar-ms_reader/Db/06-categories.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../wn-rajar-ms_reader/Db/04-seed.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../wn-rajar-ms_reader/Db/05-seed-comments.sql
       - run: npm run lint
       - run: npm test
 
@@ -81,9 +86,9 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: worldnews
+          POSTGRES_DB: test_db
         ports:
-          - 5432:5432
+          - 5433:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 2s
@@ -91,8 +96,8 @@ jobs:
           --health-retries 10
     env:
       DB_HOST: localhost
-      DB_PORT: 5432
-      DB_NAME: worldnews
+      DB_PORT: 5433
+      DB_NAME: test_db
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_SCHEMA: writer
@@ -111,6 +116,12 @@ jobs:
           cache: 'npm'
           cache-dependency-path: wm-rajar-ms_writer/BACK/package-lock.json
       - run: npm ci
+      - name: Initialiser la base de données
+        run: |
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../BDD/worldnews.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../BDD/categories.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../BDD/seed.sql
+        working-directory: wm-rajar-ms_writer/BACK
       - run: npm run lint
       - run: npm test
 
