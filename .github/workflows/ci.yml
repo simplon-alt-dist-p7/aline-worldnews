@@ -43,22 +43,22 @@ jobs:
       NODE_ENV: test
     defaults:
       run:
-        working-directory: wn-rajar-ms_reader/Backend
+        working-directory: reader/backend
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           cache: 'npm'
-          cache-dependency-path: wn-rajar-ms_reader/Backend/package-lock.json
+          cache-dependency-path: reader/backend/package-lock.json
       - run: npm ci
       - run: npx prisma generate
       - name: Initialiser la base de données
         run: |
-          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../wn-rajar-ms_reader/Db/02-worldnews.sql
-          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../wn-rajar-ms_reader/Db/06-categories.sql
-          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../wn-rajar-ms_reader/Db/04-seed.sql
-          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../wn-rajar-ms_reader/Db/05-seed-comments.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../database/01-worldnews.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../database/04-categories.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../database/02-seed.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../database/03-seed-comments.sql
       - run: npm run lint
       - run: npm test
 
@@ -66,14 +66,14 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: wn-rajar-ms_reader/Frontend
+        working-directory: reader/frontend
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           cache: 'npm'
-          cache-dependency-path: wn-rajar-ms_reader/Frontend/package-lock.json
+          cache-dependency-path: reader/frontend/package-lock.json
       - run: npm ci
       - run: npm run lint
       - run: npm test
@@ -107,21 +107,20 @@ jobs:
       FRONTEND_URL: http://localhost:5174
     defaults:
       run:
-        working-directory: wm-rajar-ms_writer/BACK
+        working-directory: writer/backend
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           cache: 'npm'
-          cache-dependency-path: wm-rajar-ms_writer/BACK/package-lock.json
+          cache-dependency-path: writer/backend/package-lock.json
       - run: npm ci
       - name: Initialiser la base de données
         run: |
-          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../BDD/worldnews.sql
-          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../BDD/categories.sql
-          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../BDD/seed.sql
-        working-directory: wm-rajar-ms_writer/BACK
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../database/01-worldnews.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../database/04-categories.sql
+          PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f ../../database/02-seed.sql
       - run: npm run lint
       - run: npm test
 
@@ -129,14 +128,14 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: wm-rajar-ms_writer/FRONT
+        working-directory: writer/frontend
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           cache: 'npm'
-          cache-dependency-path: wm-rajar-ms_writer/FRONT/package-lock.json
+          cache-dependency-path: writer/frontend/package-lock.json
       - run: npm ci
       - run: npm run lint
       - run: npm test
