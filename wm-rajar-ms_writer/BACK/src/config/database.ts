@@ -39,7 +39,7 @@ export const AppDataSource = new DataSource({
   entities: [Article, Category],
 
   // Synchronisation automatique des schémas (⚠️ DANGER en production)
-  synchronize: process.env.NODE_ENV === 'test', // true en test, false en prod
+  synchronize: false,
 
   // Logs des requêtes SQL générées
   logging: true,
