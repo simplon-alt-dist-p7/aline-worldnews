@@ -1,31 +1,87 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+# 1. Quand est-ce que le pipeline se déclenche ?
+# on : à chaque push sur main et à chaque pull request vers main.
+#2. Sur quel système ça tourne ?
+# runs-on: On choisit ubuntu-latest parce que c'est gratuit sur GitHub Actions et que le code tourne sous Linux en production (Docker).
+#3. Quels sont les jobs ?
+# job = une tâche indépendante. ici 4 services donc 4 jobs qui tournent en parallèle.
+#4. Quelles sont les étapes de chaque job ?
+# steps: Pour chaque service Node.js c'est toujours la même logique :
 
-name: Node.js CI
+#Récupérer le code (checkout)
+#Installer Node (setup-node)
+#Installer les dépendances (npm ci)
+#Lancer le lint (npm run lint)
+#Lancer les tests (npm test)
+
+name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
-  build:
-
+  reader-back:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+    defaults:
+      run:
+        working-directory: wn-rajar-ms_reader/Backend
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      - uses: actions/checkout@v4 # récupère le code du repo sur la VM ubuntu. Sans ça, la machine démarre vide et ne sait pas quel code exécuter.
+      - uses: actions/setup-node@v4 # installe Node.js sur la VM. Sans ça, npm n'existe pas et rien ne fonctionne.
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: wn-rajar-ms_reader/Backend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+
+  reader-front:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: wn-rajar-ms_reader/Frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: wn-rajar-ms_reader/Frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+
+  writer-back:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: wm-rajar-ms_writer/BACK
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: wm-rajar-ms_writer/BACK/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+
+  writer-front:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: wm-rajar-ms_writer/FRONT
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: wm-rajar-ms_writer/FRONT/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
