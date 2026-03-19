@@ -44,36 +44,28 @@ pre-commit:
 pre-push:
   commands:
     typecheck-writer-back:
-      root: 'writer/backend/'
-      run: npx tsc --noEmit
+      run: cd writer/backend && npx tsc --noEmit
 
     typecheck-writer-front:
-      root: 'writer/frontend/'
-      run: npx tsc --noEmit
+      run: cd writer/frontend && npx tsc --noEmit
 
     typecheck-reader-back:
-      root: 'reader/backend/'
-      run: npx tsc --noEmit
+      run: cd reader/backend && npx tsc --noEmit
 
     typecheck-reader-front:
-      root: 'reader/frontend/'
-      run: npx tsc --noEmit
+      run: cd reader/frontend && npx tsc --noEmit
 
     test-writer-back:
-      root: 'writer/backend/'
-      run: npx jest --passWithNoTests
+      run: cd writer/backend && npx jest --passWithNoTests
 
     test-writer-front:
-      root: 'writer/frontend/'
-      run: npx vitest run --passWithNoTests
+      run: cd writer/frontend && npx vitest run --passWithNoTests
 
     test-reader-back:
-      root: 'reader/backend/'
-      run: npx jest --passWithNoTests
+      run: cd reader/backend && npx jest --passWithNoTests
 
     test-reader-front:
-      root: 'reader/frontend/'
-      run: npx vitest run --passWithNoTests
+      run: cd reader/frontend && npx vitest run --passWithNoTests
 
     test-e2e:
-      run: npx playwright test
+      run: cd writer/frontend && npx playwright test
