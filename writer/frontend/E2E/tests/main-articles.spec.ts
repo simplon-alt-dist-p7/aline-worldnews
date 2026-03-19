@@ -10,7 +10,7 @@ test.describe('Page principale - Gestion des articles', () => {
     await articlesPage.isPageLoaded();
   });
 
-    test('Vérifier le chargement de la page et l\'affichage des articles', async () => {
+  test("Vérifier le chargement de la page et l'affichage des articles", async () => {
     // Vérifier que la liste des articles est visible
     const count = await articlesPage.getArticleCount();
     expect(count).toBeGreaterThan(0);
@@ -47,7 +47,7 @@ test.describe('Page principale - Gestion des articles', () => {
     const articlesPage2 = await page.getByRole('article').count();
     expect(articlesPage2).toBeGreaterThan(0);
 
-      // Revenir à la page 1 avec le bouton "Page précédente"
+    // Revenir à la page 1 avec le bouton "Page précédente"
     await articlesPage.goToPreviousPage();
 
     // Vérifier que nous sommes revenu à la page 1
@@ -59,26 +59,22 @@ test.describe('Page principale - Gestion des articles', () => {
     // Trouver le select pour la limite d'articles via le label
     const limitSelect = page.getByLabel('Afficher');
     await expect(limitSelect).toBeVisible();
-      // Sélectionner l'option "10"
+    // Sélectionner l'option "10"
     await limitSelect.selectOption('10');
     await page.waitForLoadState('networkidle');
 
-      // Vérifier que la nouvelle valeur est sélectionnée
+    // Vérifier que la nouvelle valeur est sélectionnée
     const newValue = await limitSelect.inputValue();
     expect(newValue).toBe('10');
 
-      // Vérifier le nombre d'articles affichés
+    // Vérifier le nombre d'articles affichés
     const articlesCount = await page.getByRole('article').count();
     expect(articlesCount).toBeLessThanOrEqual(10);
   });
 
-  test('Cliquer sur le bouton Modifier d\'un article', async ({ page }) => {
+  test("Cliquer sur le bouton Modifier d'un article", async ({ page }) => {
     // Cliquer sur le bouton "Modifier" du premier article
     await articlesPage.editArticle();
     await expect(page).toHaveURL(/\/articles\/\d+\/edit/);
-
   });
-
-
-
 });

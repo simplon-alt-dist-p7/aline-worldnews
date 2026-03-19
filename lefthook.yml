@@ -1,34 +1,79 @@
-# EXAMPLE USAGE
-# Refer for explanation to following link:
-# https://github.com/evilmartians/lefthook/blob/master/docs/full_guide.md
-#
-# pre-push:
-#   commands:
-#     packages-audit:
-#       tags: frontend security
-#       run: yarn audit
-#     gems-audit:
-#       tags: backend security
-#       run: bundle audit
-#
-# pre-commit:
-#   parallel: true
-#   commands:
-#     eslint:
-#       glob: "*.{js,ts}"
-#       run: yarn eslint {staged_files}
-#     rubocop:
-#       tags: backend style
-#       glob: "*.rb"
-#       exclude: "application.rb|routes.rb"
-#       run: bundle exec rubocop --force-exclusion {all_files}
-#     govet:
-#       tags: backend style
-#       files: git ls-files -m
-#       glob: "*.go"
-#       run: go vet {files}
-#   scripts:
-#     "hello.js":
-#       runner: node
-#     "any.go":
-#       runner: go run
+pre-commit:
+  parallel: true
+  commands:
+    eslint-writer-back:
+      glob: '*.{ts,js}'
+      root: 'writer/backend/'
+      run: npx eslint --fix {staged_files} && git add {staged_files}
+
+    eslint-writer-front:
+      glob: '*.{ts,tsx,js,jsx}'
+      root: 'writer/frontend/'
+      run: npx eslint --fix {staged_files} && git add {staged_files}
+
+    eslint-reader-back:
+      glob: '*.{ts,js}'
+      root: 'reader/backend/'
+      run: npx eslint --fix {staged_files} && git add {staged_files}
+
+    eslint-reader-front:
+      glob: '*.{ts,tsx,js,jsx}'
+      root: 'reader/frontend/'
+      run: npx eslint --fix {staged_files} && git add {staged_files}
+
+    prettier-writer-back:
+      glob: '*.{ts,js,json,md}'
+      root: 'writer/backend/'
+      run: npx prettier --write {staged_files} && git add {staged_files}
+
+    prettier-writer-front:
+      glob: '*.{ts,tsx,js,jsx,css,json,md}'
+      root: 'writer/frontend/'
+      run: npx prettier --write {staged_files} && git add {staged_files}
+
+    prettier-reader-back:
+      glob: '*.{ts,js,json,md}'
+      root: 'reader/backend/'
+      run: npx prettier --write {staged_files} && git add {staged_files}
+
+    prettier-reader-front:
+      glob: '*.{ts,tsx,js,jsx,css,json,md}'
+      root: 'reader/frontend/'
+      run: npx prettier --write {staged_files} && git add {staged_files}
+
+pre-push:
+  commands:
+    typecheck-writer-back:
+      root: 'writer/backend/'
+      run: npx tsc --noEmit
+
+    typecheck-writer-front:
+      root: 'writer/frontend/'
+      run: npx tsc --noEmit
+
+    typecheck-reader-back:
+      root: 'reader/backend/'
+      run: npx tsc --noEmit
+
+    typecheck-reader-front:
+      root: 'reader/frontend/'
+      run: npx tsc --noEmit
+
+    test-writer-back:
+      root: 'writer/backend/'
+      run: npx jest --passWithNoTests
+
+    test-writer-front:
+      root: 'writer/frontend/'
+      run: npx vitest run --passWithNoTests
+
+    test-reader-back:
+      root: 'reader/backend/'
+      run: npx jest --passWithNoTests
+
+    test-reader-front:
+      root: 'reader/frontend/'
+      run: npx vitest run --passWithNoTests
+
+    test-e2e:
+      run: npx playwright test
