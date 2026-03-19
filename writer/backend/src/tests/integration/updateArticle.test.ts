@@ -22,11 +22,13 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  const articleRepo = AppDataSource.getRepository('Article');
-  await articleRepo.update(articleId, {
-    title: 'Découverte scientifique : une nouvelle exoplanète habitable',
-  });
   if (AppDataSource.isInitialized) {
+    if (articleId) {
+      const articleRepo = AppDataSource.getRepository('Article');
+      await articleRepo.update(articleId, {
+        title: 'Découverte scientifique : une nouvelle exoplanète habitable',
+      });
+    }
     await AppDataSource.destroy();
   }
 });
