@@ -44,7 +44,7 @@ Les microservices **Writer** et **Reader** utilisent des stacks différentes (vo
 
 ---
 
-## Hook Git - Lefthook
+## Hook Git — Lefthook, ESLint, Prettier
 
 Lefthook permet d’exécuter automatiquement des tâches avant un commit ou un push. L'objectif est de maintenir la qualité du code et éviter de pousser des erreurs ou du code mal formaté.
 
@@ -129,7 +129,7 @@ La configuration est centralisée à la racine dans `prettier.config.js`, ce qui
 
 ---
 
-## Jest - Tests unitaires
+## Jest — Tests unitaires
 
 Jest est utilisé dans tous les backends pour les tests unitaires.
 
@@ -143,7 +143,7 @@ Les dépendances externes (services, base de données, modules tiers) sont **moc
 
 ---
 
-## Supertest - Tests d’intégration API
+## Supertest — Tests d'intégration API
 
 Supertest est utilisé pour tester les routes HTTP et l'intégration complète des composants backend, de la requête jusqu'à la base de données : route → controller → service → base de données → réponse.
 
@@ -198,7 +198,7 @@ Dans les deux cas, `NODE_ENV=test` est défini via **`cross-env`** dans les scri
 
 ---
 
-## Playwright - Tests End-to-End
+## Playwright — Tests End-to-End
 
 Playwright est présent dans chaque frontend pour valider le comportement réel de l'application du point de vue utilisateur.
 
@@ -312,7 +312,7 @@ Dans cette configuration, les backs et fronts ne sont accessibles qu'à travers 
 
 ---
 
-## Intégration continue avec Github Actions
+## Intégration continue avec GitHub Actions
 
 ### Définitions
 
