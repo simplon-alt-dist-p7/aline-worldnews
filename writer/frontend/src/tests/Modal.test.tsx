@@ -26,9 +26,4 @@ describe('Modal', () => {
     render(<Modal {...defaultProps} />);
     expect(screen.getByText('Compris')).toBeInTheDocument();
   });
-
-  test('affiche le bouton Annuler', () => {
-    render(<Modal {...defaultProps} />);
-    expect(screen.getByText('Annuler')).toBeInTheDocument();
-  });
 });

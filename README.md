@@ -414,6 +414,8 @@ Exemples de volumes utilisés dans ce projet :
 
 ## Intégration continue avec Github Actions
 
+y'a du taf !
+
 GitHub Actions c'est un vérificateur automatique — il vérifie que ton code est correct avant qu'il parte en production. Il lance le lint, les tests, et bloque si quelque chose échoue.
 
 quelques définitions :

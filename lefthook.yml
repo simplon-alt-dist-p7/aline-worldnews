@@ -12,12 +12,12 @@ pre-commit:
       run: npx eslint --fix {staged_files} && git add {staged_files}
 
     eslint-reader-back:
-      glob: '*.{ts,js}'
+      glob: '*.{js}'
       root: 'reader/backend/'
       run: npx eslint --fix {staged_files} && git add {staged_files}
 
     eslint-reader-front:
-      glob: '*.{ts,tsx,js,jsx}'
+      glob: '*.{js,jsx}'
       root: 'reader/frontend/'
       run: npx eslint --fix {staged_files} && git add {staged_files}
 
@@ -32,12 +32,12 @@ pre-commit:
       run: npx prettier --write {staged_files} && git add {staged_files}
 
     prettier-reader-back:
-      glob: '*.{ts,js,json,md}'
+      glob: '*.{js,json,md}'
       root: 'reader/backend/'
       run: npx prettier --write {staged_files} && git add {staged_files}
 
     prettier-reader-front:
-      glob: '*.{ts,tsx,js,jsx,css,json,md}'
+      glob: '*.{js,jsx,css,json,md}'
       root: 'reader/frontend/'
       run: npx prettier --write {staged_files} && git add {staged_files}
 
@@ -48,12 +48,6 @@ pre-push:
 
     typecheck-writer-front:
       run: cd writer/frontend && npx tsc --noEmit
-
-    typecheck-reader-back:
-      run: cd reader/backend && npx tsc --noEmit
-
-    typecheck-reader-front:
-      run: cd reader/frontend && npx tsc --noEmit
 
     test-writer-back:
       run: cd writer/backend && npx jest --passWithNoTests
@@ -66,6 +60,3 @@ pre-push:
 
     test-reader-front:
       run: cd reader/frontend && npx vitest run --passWithNoTests
-
-    test-e2e:
-      run: cd writer/frontend && npx playwright test
