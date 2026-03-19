@@ -14,19 +14,24 @@ beforeAll(async () => {
     await AppDataSource.initialize();
   }
   const articleRepo = AppDataSource.getRepository('Article');
-  const article = await articleRepo.findOneBy({ title: 'Découverte scientifique : une nouvelle exoplanète habitable' });
+  const article = await articleRepo.findOneBy({
+    title: 'Découverte scientifique : une nouvelle exoplanète habitable',
+  });
   if (!article) throw new Error('article not found');
   articleId = article.id;
 });
 
 afterAll(async () => {
+  const articleRepo = AppDataSource.getRepository('Article');
+  await articleRepo.update(articleId, {
+    title: 'Découverte scientifique : une nouvelle exoplanète habitable',
+  });
   if (AppDataSource.isInitialized) {
     await AppDataSource.destroy();
   }
 });
 
 console.log(AppDataSource.options.database);
-
 
 describe('PUT /articles/:id', () => {
   it('should update the title in the test_db', async () => {
@@ -35,7 +40,9 @@ describe('PUT /articles/:id', () => {
       .send({ title: 'Découverte scientifique : Urion : une nouvelle exoplanète habitable' });
 
     expect(res.status).toBe(200);
-    expect(res.body.data.title).toBe('Découverte scientifique : Urion : une nouvelle exoplanète habitable');
+    expect(res.body.data.title).toBe(
+      'Découverte scientifique : Urion : une nouvelle exoplanète habitable',
+    );
     expect(res.body.message).toBe('Article mis à jour avec succès');
   });
 });
