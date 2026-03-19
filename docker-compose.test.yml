@@ -8,6 +8,11 @@ services:
       POSTGRES_DB: test_db
     ports:
       - "5433:5432"
+    volumes:
+      - ./database/01-worldnews.sql:/docker-entrypoint-initdb.d/01-worldnews.sql
+      - ./database/02-seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+      - ./database/03-seed-comments.sql:/docker-entrypoint-initdb.d/03-seed-comments.sql
+      - ./database/04-categories.sql:/docker-entrypoint-initdb.d/04-categories.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 2s
