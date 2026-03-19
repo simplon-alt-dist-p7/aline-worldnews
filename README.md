@@ -22,21 +22,21 @@ Chaque service et chaque front possède son propre environnement, ses propres te
   - [Base de données de test](#base-de-données-de-test)
 - [Tests frontend](#tests-frontend)
   - [Vitest et Testing Library](#vitest-et-testing-library)
-  - [Playwright — Tests End-to-End](#playwright--tests-end-to-end)
+  - [Playwright — Tests end-to-end](#playwright--tests-end-to-end)
 - [Conteneurisation Docker](#conteneurisation-docker)
 - [Intégration continue avec GitHub Actions](#intégration-continue-avec-github-actions)
 - [Déploiement](#déploiement)
 
 ---
 
-## 🔗README des sous-projets
+## README des sous-projets
 
 - [Writer](https://github.com/simplon-alt-dist-p7/writer)
 - [Reader](https://github.com/simplon-alt-dist-p7/reader)
 
 ---
 
-## 📁Architecture générale
+## Architecture générale
 
 ```
 aline-worldnews/
@@ -115,7 +115,7 @@ Les frontends sont alignés sur les choix techniques de leur backend respectif.
 
 ---
 
-## Hook Git — Lefthook / ESLint / Prettier
+## Hook Git — Lefthook, ESLint, Prettier
 
 Lefthook exécute automatiquement des vérifications avant chaque commit et avant chaque push.
 
@@ -217,7 +217,7 @@ npm test
 npm run test:watch
 ```
 
-## Playwright - Tests End-to-End
+## Playwright — Tests End-to-End
 
 Tests situés dans `frontend/E2E/`. Valident l'expérience utilisateur complète dans un vrai navigateur.
 
@@ -270,6 +270,10 @@ docker-compose up
 # Arrêter et supprimer les conteneurs
 docker-compose down
 ```
+
+---
+
+## Intégration continue avec GitHub Actions
 
 Le pipeline CI se déclenche à chaque push sur `main` et à chaque pull request vers `main`.
 
