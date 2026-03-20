@@ -13,6 +13,5 @@ export default defineConfig({
     setupFiles: './src/tests/setup.js',
     exclude: ['E2E/**', 'node_modules/**'],
     maxWorkers: 1,
-    minWorkers: 1,
   },
 });
