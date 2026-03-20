@@ -29,7 +29,7 @@ app.use('/', routes);
 
 app.get('/', (req: Request, res: Response) => {
   res.json({
-    message: "Bienvenue sur l'API wm-rajar-ms_writer",
+    message: "Bienvenue sur l'API writer/backend",
     status: 'running',
   });
 });

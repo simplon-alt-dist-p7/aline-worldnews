@@ -75,6 +75,10 @@ pre-commit:
     # ... idem pour writer/frontend, reader/backend, reader/frontend
 ```
 
+**pourquoi glob ?**
+
+Par exemple si je stage un fichier .md, ESLint va le recevoir et retourner une erreur car il ne sait pas le linter. Donc on précise les fichiers à analyser.
+
 - `glob` — filtre les fichiers par extension
 - `root` — restreint le hook au dossier du service
 - `{staged_files}` — injecte automatiquement la liste des fichiers stagés correspondants
@@ -381,4 +385,45 @@ services:
 
 ## Déploiement
 
-(A faire)
+Après avoir créé une worldnews-db dans render, on récupère "External Database URL" et on lance les script dans le terminal :
+
+bashpsql postgresql://worldnews_t204_user:oYnMKRtuy1lpS9AOIHNyvaMlDJrldL0q@dpg-d6ug5fma2pns739bmi5g-a.oregon-postgres.render.com/worldnews_t204 -f database/01-worldnews.sql
+Puis enchaîne avec les suivants :
+bashpsql postgresql://worldnews_t204_user:oYnMKRtuy1lpS9AOIHNyvaMlDJrldL0q@dpg-d6ug5fma2pns739bmi5g-a.oregon-postgres.render.com/worldnews_t204 -f database/04-categories.sql
+psql postgresql://worldnews_t204_user:oYnMKRtuy1lpS9AOIHNyvaMlDJrldL0q@dpg-d6ug5fma2pns739bmi5g-a.oregon-postgres.render.com/worldnews_t204 -f database/02-seed.sql
+psql postgresql://worldnews_t204_user:oYnMKRtuy1lpS9AOIHNyvaMlDJrldL0q@dpg-d6ug5fma2pns739bmi5g-a.oregon-postgres.render.com/worldnews_t204 -f database/03-seed-comments.sql
+
+service writer/back :
+
+PORT=5000
+NODE_ENV=production
+FRONTEND_URL=\*
+DB_HOST=dpg-d6ug5fma2pns739bmi5g-a.oregon-postgres.render.com
+DB_PORT=5432
+DB_NAME=worldnews_t204
+DB_USER=worldnews_t204_user
+DB_PASSWORD=oYnMKRtuy1lpS9AOIHNyvaMlDJrldL0q
+DB_SCHEMA=writer
+GEMINI_API_KEY=dummy
+DB_SSL=true
+
+SSL : protocole de chiffrement qui sécurise les données entre deux machines. (ici back et db)
+J'ai rajouté le protocole dans .env et database.ts
+
+Writer utilise TypeORM — la config SSL se fait dans database.ts via les options de connexion, donc on a dû modifier le code
+Reader utilise Prisma — la config SSL se fait directement dans la DATABASE_URL avec ?sslmode=require, pas besoin de modifier le code
+
+pour le front on ne déploie pas un web service mais un static site :
+
+New → Static Site, sélectionne aline-worldnews et remplis pour le writer-front :
+
+Nom : worldnews-writer-front
+Projet : worldnews
+Branche : main
+Région : Oregon
+Répertoire racine : writer/frontend
+Build Command : npm install && npm run build (à expliquer) : Build c'est le processus de transformation du code source en code exécutable/déployable.
+Publish Directory : dist (à expliquer) : : Quand tu buildes ton frontend, Vite compile tout ton code React en fichiers HTML/CSS/JS statiques et les met dans un dossier dist/. C'est ce dossier que Render va servir comme site web.
+
+Et pour les variables d'environnement :
+VITE_API_URL=https://aline-worldnews.onrender.com
