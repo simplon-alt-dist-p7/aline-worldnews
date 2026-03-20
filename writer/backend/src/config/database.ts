@@ -33,7 +33,9 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER!,
   password: process.env.DB_PASSWORD || '',
 
-  ...(process.env.NODE_ENV === 'test' ? { schema: 'writer' } : {}),
+  schema: process.env.NODE_ENV === 'test' ? 'writer' : process.env.DB_SCHEMA || 'writer',
+
+  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
 
   // Liste de toutes vos entities
   entities: [Article, Category],
