@@ -12,11 +12,7 @@ export default defineConfig({
     globals: true,
     setupFiles: './src/tests/setup.ts',
     exclude: ['E2E/**', 'node_modules/**'],
-    pool: 'forks',
-    poolOptions: {
-      forks: {
-        maxForks: 1,
-      },
-    },
+    maxWorkers: 1,
+    minWorkers: 1,
   },
 });
