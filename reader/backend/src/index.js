@@ -14,7 +14,9 @@ const PORT = process.env.PORT || 5001;
 // Middleware CORS
 app.use(
   cors({
-    origin: ['http://localhost:5175', 'https://votredomaine.com'],
+    origin: process.env.FRONTEND_URL
+      ? process.env.FRONTEND_URL.split(',')
+      : ['http://localhost:5175'],
     methods: ['GET', 'POST', 'DELETE'],
     credentials: true,
   }),
