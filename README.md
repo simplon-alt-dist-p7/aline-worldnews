@@ -7,6 +7,8 @@
 
 Chaque service et chaque front possède son propre environnement, ses propres tests et son propre Dockerfile, permettant un développement, un déploiement et des tests totalement indépendants.
 
+📖 [Documentation technique détaillée](./DOCUMENTATION.md)
+
 ---
 
 ## Sommaire
@@ -31,8 +33,8 @@ Chaque service et chaque front possède son propre environnement, ses propres te
 
 ## README des sous-projets
 
-- [Writer](https://github.com/simplon-alt-dist-p7/writer)
-- [Reader](https://github.com/simplon-alt-dist-p7/reader)
+- [Writer](https://github.com/simplon-alt-dist-p7/aline-worldnews/blob/main/writer/README.md)
+- [Reader](https://github.com/simplon-alt-dist-p7/aline-worldnews/blob/main/reader/README.md)
 
 ---
 
@@ -292,4 +294,11 @@ Les jobs back provisionnent automatiquement une base PostgreSQL et exécutent le
 
 ## Déploiement
 
-_(À venir)_
+L'application est déployée sur Render.
+
+| Service         | URL                                       |
+| --------------- | ----------------------------------------- |
+| Writer Frontend | https://writer-frontend-evrf.onrender.com |
+| Writer Backend  | https://aline-worldnews.onrender.com      |
+| Reader Frontend | https://reader-frontend-693p.onrender.com |
+| Reader Backend  | https://reader-backend-y1ao.onrender.com  |

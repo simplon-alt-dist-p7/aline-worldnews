@@ -385,45 +385,63 @@ services:
 
 ## Déploiement
 
-Après avoir créé une worldnews-db dans render, on récupère "External Database URL" et on lance les script dans le terminal :
+L'application est déployée sur https://render.com et se compose de 5 services :
 
-bashpsql postgresql://worldnews_t204_user:oYnMKRtuy1lpS9AOIHNyvaMlDJrldL0q@dpg-d6ug5fma2pns739bmi5g-a.oregon-postgres.render.com/worldnews_t204 -f database/01-worldnews.sql
-Puis enchaîne avec les suivants :
-bashpsql postgresql://worldnews_t204_user:oYnMKRtuy1lpS9AOIHNyvaMlDJrldL0q@dpg-d6ug5fma2pns739bmi5g-a.oregon-postgres.render.com/worldnews_t204 -f database/04-categories.sql
-psql postgresql://worldnews_t204_user:oYnMKRtuy1lpS9AOIHNyvaMlDJrldL0q@dpg-d6ug5fma2pns739bmi5g-a.oregon-postgres.render.com/worldnews_t204 -f database/02-seed.sql
-psql postgresql://worldnews_t204_user:oYnMKRtuy1lpS9AOIHNyvaMlDJrldL0q@dpg-d6ug5fma2pns739bmi5g-a.oregon-postgres.render.com/worldnews_t204 -f database/03-seed-comments.sql
+| Service           | Type                 | URL                                       |
+| ----------------- | -------------------- | ----------------------------------------- |
+| `worldnews-db`    | PostgreSQL           | —                                         |
+| `writer/backend`  | Web Service (Docker) | https://aline-worldnews.onrender.com      |
+| `reader/backend`  | Web Service (Docker) | _(URL reader-back)_                       |
+| `writer-frontend` | Static Site          | https://writer-frontend-evrf.onrender.com |
+| `reader-frontend` | Static Site          | _(URL reader-front)_                      |
 
-service writer/back :
+---
 
-PORT=5000
-NODE_ENV=production
-FRONTEND_URL=\*
-DB_HOST=dpg-d6ug5fma2pns739bmi5g-a.oregon-postgres.render.com
-DB_PORT=5432
-DB_NAME=worldnews_t204
-DB_USER=worldnews_t204_user
-DB_PASSWORD=oYnMKRtuy1lpS9AOIHNyvaMlDJrldL0q
-DB_SCHEMA=writer
-GEMINI_API_KEY=dummy
-DB_SSL=true
+1. Base de données PostgreSQL
 
-SSL : protocole de chiffrement qui sécurise les données entre deux machines. (ici back et db)
-J'ai rajouté le protocole dans .env et database.ts
+Créer une base PostgreSQL sur Render (**New → PostgreSQL**), puis récupérer l'**External Database URL** et initialiser la base avec les scripts SQL :
 
-Writer utilise TypeORM — la config SSL se fait dans database.ts via les options de connexion, donc on a dû modifier le code
-Reader utilise Prisma — la config SSL se fait directement dans la DATABASE_URL avec ?sslmode=require, pas besoin de modifier le code
+```bash
+psql <EXTERNAL_DATABASE_URL> -f database/01-worldnews.sql
+psql <EXTERNAL_DATABASE_URL> -f database/04-categories.sql
+psql <EXTERNAL_DATABASE_URL> -f database/02-seed.sql
+psql <EXTERNAL_DATABASE_URL> -f database/03-seed-comments.sql
+```
 
-pour le front on ne déploie pas un web service mais un static site :
+---
 
-New → Static Site, sélectionne aline-worldnews et remplis pour le writer-front :
+### Backends — Web Services (Docker)
 
-Nom : worldnews-writer-front
-Projet : worldnews
-Branche : main
-Région : Oregon
-Répertoire racine : writer/frontend
-Build Command : npm install && npm run build (à expliquer) : Build c'est le processus de transformation du code source en code exécutable/déployable.
-Publish Directory : dist (à expliquer) : : Quand tu buildes ton frontend, Vite compile tout ton code React en fichiers HTML/CSS/JS statiques et les met dans un dossier dist/. C'est ce dossier que Render va servir comme site web.
+Créer un **Web Service** pour chaque backend (**New → Web Service**) en sélectionnant le repo `aline-worldnews` et en renseignant le répertoire racine du service (`writer/backend` ou `reader/backend`). Render détecte automatiquement le Dockerfile.
 
-Et pour les variables d'environnement :
-VITE_API_URL=https://aline-worldnews.onrender.com
+- Défini les variables d'environnement pour chaque service
+
+Ajouter un nom de user et un mot de passe pour sécuriser les données entre les services.
+
+- SSL
+
+Render impose SSL pour les connexions PostgreSQL - les données transitent sur internet entre le backend et la base de données.
+
+- **Writer (TypeORM)** — la config SSL est gérée dans `database.ts` via la variable `DB_SSL=true` :
+  ```typescript
+  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false;
+  ```
+- **Reader (Prisma)** — la config SSL est gérée directement dans la `DATABASE_URL` via `?sslmode=require`.
+
+- CORS
+
+Chaque backend autorise uniquement les requêtes provenant de son frontend via la variable `FRONTEND_URL`. Cette variable doit contenir l'URL exacte du frontend déployé sur Render.
+
+### Frontends — Static Sites
+
+Les frontends React sont déployés en **Static Site** (pas en Web Service) car `npm run build` génère des fichiers HTML/CSS/JS statiques qui n'ont pas besoin d'un serveur Node.js pour tourner.
+
+Créer un **Static Site** pour chaque frontend (**New → Static Site**) avec ces paramètres :
+
+| Paramètre         | writer/frontend                | reader/frontend                |
+| ----------------- | ------------------------------ | ------------------------------ |
+| Répertoire racine | `writer/frontend`              | `reader/frontend`              |
+| Build Command     | `npm install && npm run build` | `npm install && npm run build` |
+| Publish Directory | `dist`                         | `dist`                         |
+
+> **`npm run build`** — compile le code React/TypeScript en fichiers statiques optimisés via Vite. Le dossier `dist/` contient le résultat : un `index.html` et des fichiers JS/CSS minifiés prêts à être servis.
