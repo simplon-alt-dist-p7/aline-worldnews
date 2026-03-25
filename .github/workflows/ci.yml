@@ -60,7 +60,7 @@ jobs:
           PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/02-seed.sql
           PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/03-seed-comments.sql
       - run: npm run lint
-      - run: npm test
+      - run: npm test -- --coverage --coverageReporters=text-summary
 
   reader-front:
     runs-on: ubuntu-latest
@@ -76,7 +76,7 @@ jobs:
           cache-dependency-path: reader/frontend/package-lock.json
       - run: npm ci
       - run: npm run lint
-      - run: npm test
+      - run: npm test -- --coverage
 
   writer-back:
     runs-on: ubuntu-latest
@@ -122,7 +122,7 @@ jobs:
           PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/04-categories.sql
           PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/02-seed.sql
       - run: npm run lint
-      - run: npm test
+      - run: npm test -- --coverage --coverageReporters=text-summary
 
   writer-front:
     runs-on: ubuntu-latest
@@ -138,4 +138,4 @@ jobs:
           cache-dependency-path: writer/frontend/package-lock.json
       - run: npm ci
       - run: npm run lint
-      - run: npm test
+      - run: npm test -- --coverage
