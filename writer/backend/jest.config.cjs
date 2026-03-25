@@ -29,4 +29,5 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.ts', '!src/**/*.test.ts', '!src/**/*.d.ts'],
   transformIgnorePatterns: ['/node_modules/(?!(uuid)/)'],
   testMatch: ['**/src/tests/**/*.test.ts'],
+  coverageReporters: ['json-summary', 'text'],
 };
