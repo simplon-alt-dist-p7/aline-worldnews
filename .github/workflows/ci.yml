@@ -60,7 +60,12 @@ jobs:
           PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/02-seed.sql
           PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/03-seed-comments.sql
       - run: npm run lint
-      - run: npm test -- --coverage --coverageReporters=text-summary
+      - run: npm run test:coverage
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reader-back
+          path: reader/backend/coverage/coverage-summary.json
 
   reader-front:
     runs-on: ubuntu-latest
@@ -76,7 +81,12 @@ jobs:
           cache-dependency-path: reader/frontend/package-lock.json
       - run: npm ci
       - run: npm run lint
-      - run: npm test -- --coverage
+      - run: npm run test:coverage
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reader-front
+          path: reader/frontend/coverage/coverage-summary.json
 
   writer-back:
     runs-on: ubuntu-latest
@@ -122,7 +132,12 @@ jobs:
           PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/04-categories.sql
           PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d test_db -f $GITHUB_WORKSPACE/database/02-seed.sql
       - run: npm run lint
-      - run: npm test -- --coverage --coverageReporters=text-summary
+      - run: npm run test:coverage
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-writer-back
+          path: writer/backend/coverage/coverage-summary.json
 
   writer-front:
     runs-on: ubuntu-latest
@@ -138,4 +153,8 @@ jobs:
           cache-dependency-path: writer/frontend/package-lock.json
       - run: npm ci
       - run: npm run lint
-      - run: npm test -- --coverage
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-writer-front
+          path: writer/frontend/coverage/coverage-summary.json

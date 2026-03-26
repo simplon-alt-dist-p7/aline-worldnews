@@ -7,7 +7,7 @@
     "start": "node server.js",
     "test": "cross-env NODE_ENV=test jest --detectOpenHandles --forceExit",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
-    "test:coverage": "jest --coverage",
+    "test:coverage": "cross-env NODE_ENV=test jest --detectOpenHandles --forceExit --coverage",
     "lint": "eslint ."
   },
   "author": "",

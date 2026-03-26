@@ -383,6 +383,73 @@ services:
 
 ---
 
+## Coverage
+
+### Fonctionnement global
+
+Le coverage mesure le pourcentage de code source réellement exécuté pendant les tests.
+Il est calculé automatiquement à chaque push par le pipeline CI.
+
+```
+Tests (Jest/Vitest) --> coverage-summary.json --> script --> badges SVG --> commit dans le repo
+```
+
+### Génération du rapport
+
+Jest et Vitest génèrent un fichier `coverage-summary.json` dans un dossier `coverage/`
+à l'intérieur de chaque service, via les scripts `test:coverage` dans chaque `package.json` :
+
+```json
+"test:coverage": "cross-env NODE_ENV=test jest --detectOpenHandles --forceExit --coverage"
+"test:coverage": "vitest run --coverage"
+```
+
+Les reporters sont configurés dans `jest.config.js` et `vite.config.js` :
+
+```js
+coverageReporters: ['json-summary', 'text'];
+```
+
+`json-summary` génère le fichier JSON lu par le script.
+`text` affiche le tableau de coverage dans les logs du pipeline.
+
+### Artifacts GitHub Actions
+
+Les jobs tournent sur des machines virtuelles séparées qui sont supprimées à la fin.
+Les fichiers `coverage-summary.json` sont donc uploadés en tant qu'artifacts pour être
+récupérés ensuite par le job `badge` :
+
+```yaml
+- name: Upload coverage
+  uses: actions/upload-artifact@v4
+  with:
+    name: coverage-reader-back
+    path: reader/backend/coverage/coverage-summary.json
+```
+
+Le job `badge` attend que les 4 jobs soient terminés (`needs`), télécharge les 4 fichiers,
+puis lance le script :
+
+```yaml
+badge:
+  needs: [reader-back, reader-front, writer-back, writer-front]
+```
+
+### Script generate-coverage-badge.js
+
+Le script `scripts/generate-coverage-badge.js` lit chaque `coverage-summary.json`,
+extrait le pourcentage de lignes couvertes (`total.lines.pct`) et génère un badge SVG
+via la librairie `badge-maker` :
+
+- 🔴 Rouge — coverage < 25%
+- 🟠 Orange — coverage < 40%
+- 🟢 Vert — coverage ≥ 40%
+
+Les badges sont ensuite committés automatiquement dans le repo par le pipeline
+et affichés dans le README.
+
+---
+
 ## Déploiement
 
 L'application est déployée sur https://render.com et se compose de 5 services :

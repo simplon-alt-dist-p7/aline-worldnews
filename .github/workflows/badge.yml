@@ -1,0 +1,60 @@
+# Le workflow_run veut dire : "déclenche-toi quand le workflow CI est terminé".
+#Et le if : conclusion == 'success' veut dire :
+#"seulement si la CI est passée au vert" —> pas la peine de générer des badges si les tests ont échoué.
+
+name: Badge
+
+on:
+  workflow_run:
+    workflows: ['CI']
+    types:
+      - completed
+
+jobs:
+  badge:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+      - run: npm ci
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: coverage-reader-back
+          path: reader/backend/coverage
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: coverage-reader-front
+          path: reader/frontend/coverage
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: coverage-writer-back
+          path: writer/backend/coverage
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: coverage-writer-front
+          path: writer/frontend/coverage
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: node scripts/generate-coverage-badge.js
+
+      - name: Commit les badges
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add badgess/coverage-*.svg
+          git diff --staged --quiet || git commit -m "chore: update coverage badges"
+          git push

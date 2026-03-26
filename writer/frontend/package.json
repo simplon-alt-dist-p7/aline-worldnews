@@ -15,7 +15,8 @@
     "test:report": "playwright show-report",
     "test:headed": "playwright test --headed",
     "test:main": "playwright test E2E/main-articles.spec.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "react": "^19.2.0",

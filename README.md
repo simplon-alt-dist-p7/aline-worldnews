@@ -25,6 +25,7 @@ Chaque service et chaque front possède son propre environnement, ses propres te
 - [Tests frontend](#tests-frontend)
   - [Vitest et Testing Library](#vitest-et-testing-library)
   - [Playwright — Tests end-to-end](#playwright--tests-end-to-end)
+- [Coverage](#coverage)
 - [Conteneurisation Docker](#conteneurisation-docker)
 - [Intégration continue avec GitHub Actions](#intégration-continue-avec-github-actions)
 - [Déploiement](#déploiement)
@@ -242,6 +243,23 @@ npx playwright show-report
 # Test spécifique
 npx playwright test E2E/tests/main-articles.spec.ts
 ```
+
+---
+
+## Coverage
+
+Les badges de coverage sont générés automatiquement à chaque push sur `main` par le pipeline CI.
+
+![reader-back](./badges/coverage-reader-back.svg)
+![reader-front](./badges/coverage-reader-front.svg)
+![writer-back](./badges/coverage-writer-back.svg)
+![writer-front](./badges/coverage-writer-front.svg)
+
+Le coverage est calculé par Jest (backends, unitaires + intégration)
+et Vitest (frontends, unitaires + composants Testing Library).
+Les tests E2E Playwright ne sont pas inclus dans le coverage.
+Les résultats sont récupérés depuis les fichiers `coverage-summary.json` générés automatiquement,
+puis transformés en badges SVG via le script `scripts/generate-coverage-badge.js`.
 
 ---
 
