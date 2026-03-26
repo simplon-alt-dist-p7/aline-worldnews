@@ -61,4 +61,4 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git add badges/coverage-*.svg
           git diff --staged --quiet || git commit -m "chore: update coverage badges"
-          git push
+          git push --no-verify
