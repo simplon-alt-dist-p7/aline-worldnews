@@ -10,6 +10,10 @@ on:
     types:
       - completed
 
+permissions:
+  contents: write
+  actions: read
+
 jobs:
   badge:
     runs-on: ubuntu-latest
