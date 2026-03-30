@@ -5,7 +5,6 @@ describe('/articles', () => {
   //article/id
   test.each([['deslettres'], ['!?&']])('return 400 for invalid id', async (invalidId) => {
     const response = await request(app).get(`/articles/${invalidId}`);
-    console.log(response.status, response.body);
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty('error', 'Erreur de validation');
   });

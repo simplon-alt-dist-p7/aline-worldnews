@@ -46,7 +46,6 @@ describe('POST /articles/:id/restore', () => {
 
   it('should return 404 if article not found', async () => {
     const res = await request(app).post('/articles/999999999/restore');
-    console.log(res.status, res.body);
     expect(res.status).toBe(404);
     expect(res.body.error).toBe('Article non trouvé');
   });

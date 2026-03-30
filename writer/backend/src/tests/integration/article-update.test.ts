@@ -34,8 +34,6 @@ afterAll(async () => {
   }
 });
 
-console.log(AppDataSource.options.database);
-
 describe('PUT /articles/:id', () => {
   it('should update the title in the test_db', async () => {
     const res = await request(app)

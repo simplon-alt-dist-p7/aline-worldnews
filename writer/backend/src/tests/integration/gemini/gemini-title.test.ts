@@ -5,7 +5,7 @@ import { geminiService } from '../../../services/gemini.service.js';
 
 //Test Gemini : service externe donc on mock !
 //remplace le module gemini.service
-jest.mock('../../services/gemini.service.js', () => ({
+jest.mock('../../../services/gemini.service.js', () => ({
   geminiService: {
     //objet idem au serviceréel
     generateTitle: jest.fn(), //fonction mockée + fonction fausse
