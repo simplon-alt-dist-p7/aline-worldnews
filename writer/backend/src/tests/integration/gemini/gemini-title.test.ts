@@ -1,7 +1,7 @@
 import express from 'express';
 import request from 'supertest';
-import { geminiController } from '../../controller/gemini.controller.js';
-import { geminiService } from '../../services/gemini.service.js';
+import { geminiController } from '../../../controller/gemini.controller.js';
+import { geminiService } from '../../../services/gemini.service.js';
 
 //Test Gemini : service externe donc on mock !
 //remplace le module gemini.service
