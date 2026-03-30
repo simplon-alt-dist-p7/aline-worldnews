@@ -18,7 +18,7 @@ beforeAll(async () => {
   }
   const articleRepo = AppDataSource.getRepository('Article');
   const article = await articleRepo.findOne({
-    where: { title: 'Découverte scientifique : une nouvelle exoplanète habitable' },
+    where: {},
     withDeleted: true,
   });
   if (!article) throw new Error('article not found');
