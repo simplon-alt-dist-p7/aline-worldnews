@@ -120,6 +120,11 @@ class ArticleController {
 
       const restoredArticle = await articleService.restoreArticle(articleId);
 
+      if (!restoredArticle) {
+        res.status(404).json({ error: 'Article non trouvé' });
+        return;
+      }
+
       res.status(200).json({
         message: 'Article restauré avec succès',
         data: restoredArticle,
