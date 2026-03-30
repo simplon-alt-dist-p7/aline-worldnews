@@ -250,10 +250,14 @@ npx playwright test E2E/tests/main-articles.spec.ts
 
 Les badges de coverage sont générés automatiquement à chaque push sur `main` par le pipeline CI.
 
+<!-- COVERAGE BADGES START -->
+
 ![reader-back](./badges/coverage-reader-back.svg)
 ![reader-front](./badges/coverage-reader-front.svg)
 ![writer-back](./badges/coverage-writer-back.svg)
 ![writer-front](./badges/coverage-writer-front.svg)
+
+<!-- COVERAGE BADGES END -->
 
 Le coverage est calculé par Jest (backends, unitaires + intégration)
 et Vitest (frontends, unitaires + composants Testing Library).
