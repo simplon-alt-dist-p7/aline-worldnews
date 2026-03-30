@@ -14,7 +14,7 @@ export default defineConfig({
     exclude: ['E2E/**', 'node_modules/**'],
     maxWorkers: 1,
     coverage: {
-      reporter: ['text', 'json-summary'],
+      reporter: ['json-summary', 'text'],
     },
   },
 });

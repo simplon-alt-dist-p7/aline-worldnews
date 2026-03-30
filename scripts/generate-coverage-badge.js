@@ -13,9 +13,9 @@ function getCoveragePercent(jsonPath) {
 }
 
 const setColor = (value) => {
-  if (value < 50) return '#e63946'; // rouge vif
-  if (value < 80) return '#f4a261'; // orange vif / bien visible
-  return '#2a9d8f'; // vert vif
+  if (value < 50) return '#e63946';
+  if (value < 80) return '#f4a261';
+  return '#2a9d8f';
 };
 
 const services = [
