@@ -44,7 +44,7 @@ export const AppDataSource = new DataSource({
   synchronize: false,
 
   // Logs des requêtes SQL générées
-  logging: true,
+  logging: process.env.DB_LOGGING === 'true',
 
   // Pool de connexions
   extra: {
