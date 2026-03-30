@@ -13,8 +13,8 @@ function getCoveragePercent(jsonPath) {
 }
 
 const setColor = (value) => {
-  if (value < 25) return 'red';
-  if (value < 40) return 'orange';
+  if (value < 50) return 'red';
+  if (value < 80) return 'orange';
   return 'brightgreen';
 };
 
