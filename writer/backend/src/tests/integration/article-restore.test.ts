@@ -16,30 +16,39 @@ beforeAll(async () => {
   if (!AppDataSource.isInitialized) await AppDataSource.initialize();
 
   const articleRepo = AppDataSource.getRepository('Article');
-  const article = await articleRepo.findOneBy({
-    title: 'Découverte scientifique : une nouvelle exoplanète habitable',
-  });
-  if (!article) throw new Error('article not found');
-  articleId = article.id;
 
+  // Créer l'article de test
+  const article = articleRepo.create({
+    title: 'Article de test restore',
+    subtitle: 'Sous-titre de test',
+    subhead: 'Chapeau de test',
+    body: 'Contenu de test',
+    categoryId: 1,
+  });
+  const saved = await articleRepo.save(article);
+  articleId = saved.id;
+
+  // Le supprimer soft pour pouvoir le restaurer
   await articleRepo.softDelete(articleId);
 });
 
 afterAll(async () => {
-  if (AppDataSource.isInitialized) await AppDataSource.destroy();
+  if (AppDataSource.isInitialized) {
+    const articleRepo = AppDataSource.getRepository('Article');
+    await articleRepo.delete(articleId);
+    await AppDataSource.destroy();
+  }
 });
 
 describe('POST /articles/:id/restore', () => {
   it('should return 400 if id is not a number', async () => {
     const res = await request(app).post('/articles/abc/restore');
-
     expect(res.status).toBe(400);
     expect(res.body.error).toBe("ID d'article invalide ou manquant");
   });
 
   it('should return 400 if id is negative', async () => {
     const res = await request(app).post('/articles/-1/restore');
-
     expect(res.status).toBe(400);
     expect(res.body.error).toBe("ID d'article invalide ou manquant");
   });
@@ -52,7 +61,6 @@ describe('POST /articles/:id/restore', () => {
 
   it('should restore the article', async () => {
     const res = await request(app).post(`/articles/${articleId}/restore`);
-
     expect(res.status).toBe(200);
     expect(res.body.message).toBe('Article restauré avec succès');
     expect(res.body.data).toBeDefined();
