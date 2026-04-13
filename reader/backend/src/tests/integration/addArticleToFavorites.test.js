@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app = require('../../index');
-const prisma = require('../../prisma');
+const prisma = require('../../lib/prisma');
 
 describe('/articles/:id/favorite', () => {
   afterEach(async () => {

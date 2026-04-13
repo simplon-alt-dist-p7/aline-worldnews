@@ -20,7 +20,7 @@ async function addCommentToArticle(req, res) {
     const articleId = Number(req.params.id);
     const { content } = req.body;
     const newComment = await commentsService.addCommentToArticle(articleId, { content });
-    res.status(201).json(newComment);
+    res.status(201).json({ comment: newComment });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'Erreur interne du serveur' });
