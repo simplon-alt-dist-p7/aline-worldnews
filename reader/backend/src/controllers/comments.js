@@ -17,16 +17,9 @@ async function getCommentsByArticleId(req, res) {
 // Ajouter un commentaire à un article
 async function addCommentToArticle(req, res) {
   try {
-    const { id } = req.params;
-    const articleId = Number(id);
+    const articleId = Number(req.params.id);
     const { content } = req.body;
-
-    if (!content) {
-      return res.status(400).json({ error: 'Contenu est requis' });
-    }
-
     const newComment = await commentsService.addCommentToArticle(articleId, { content });
-
     res.status(201).json(newComment);
   } catch (e) {
     console.error(e);

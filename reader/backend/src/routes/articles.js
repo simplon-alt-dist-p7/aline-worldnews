@@ -25,6 +25,6 @@ router.delete(
 );
 
 // Monter le router commentaires sous /:id/comments
-router.use('/:id/comments', commentsRoutes);
+router.use('/:id/comments', validate(getArticleByIdSchema, 'params'), commentsRoutes);
 
 module.exports = router;
