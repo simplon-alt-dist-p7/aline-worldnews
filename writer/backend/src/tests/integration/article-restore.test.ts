@@ -16,19 +16,21 @@ beforeAll(async () => {
   if (!AppDataSource.isInitialized) await AppDataSource.initialize();
 
   const articleRepo = AppDataSource.getRepository('Article');
+  const categoryRepo = AppDataSource.getRepository('Category');
 
-  // Créer l'article de test
+  const category = await categoryRepo.findOne({ where: {} });
+  if (!category) throw new Error('Aucune catégorie disponible en BDD de test');
+
   const article = articleRepo.create({
     title: 'Article de test restore',
     subtitle: 'Sous-titre de test',
     subhead: 'Chapeau de test',
     body: 'Contenu de test',
-    categoryId: 1,
+    category,
   });
   const saved = await articleRepo.save(article);
   articleId = saved.id;
 
-  // Le supprimer soft pour pouvoir le restaurer
   await articleRepo.softDelete(articleId);
 });
 
