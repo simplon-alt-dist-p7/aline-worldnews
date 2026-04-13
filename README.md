@@ -15,6 +15,7 @@ Chaque service et chaque front possède son propre environnement, ses propres te
 
 - [README des sous-projets](#readme-des-sous-projets)
 - [Architecture générale](#architecture-générale)
+- [Installation](#installation)
 - [Base de données](#base-de-données)
 - [Choix techniques transverses](#choix-techniques-transverses)
 - [Hook Git — Lefthook, ESLint, Prettier](#hook-git--lefthook-eslint-prettier)
@@ -85,6 +86,65 @@ aline-worldnews/
 ├─ run-tests.js
 └─ settings.json
 ```
+
+## Installation
+
+### Prérequis
+
+- [Node.js](https://nodejs.org/) v20+
+- [Docker](https://www.docker.com/) et Docker Compose
+- [Git](https://git-scm.com/)
+
+### Cloner le projet
+
+```bash
+git clone git@github.com:simplon-alt-dist-p7/aline-worldnews.git
+cd aline-worldnews
+```
+
+### Installer les dépendances
+
+```bash
+# Dépendances racine (Lefthook, Prettier...)
+npm install
+
+# Dépendances de chaque service
+cd writer/backend && npm install
+cd ../../writer/frontend && npm install
+cd ../../reader/backend && npm install
+cd ../../reader/frontend && npm install
+```
+
+### Variables d'environnement
+
+Chaque service nécessite un fichier `.env` à créer à partir du fichier `.env.example` fourni :
+
+```bash
+cp writer/backend/.env.example writer/backend/.env
+cp writer/frontend/.env.example writer/frontend/.env
+cp reader/backend/.env.example reader/backend/.env
+cp reader/frontend/.env.example reader/frontend/.env
+```
+
+Renseigner les valeurs dans chaque `.env`.
+
+### Lancer le projet
+
+```bash
+# Démarrer tous les services (base de données + backends + frontends)
+docker-compose up --build
+```
+
+L'application est accessible aux URLs suivantes :
+
+| Service         | URL locale            |
+| --------------- | --------------------- |
+| Writer Frontend | http://localhost:5174 |
+| Writer Backend  | http://localhost:5000 |
+| Reader Frontend | http://localhost:5175 |
+| Reader Backend  | http://localhost:5001 |
+
+---
 
 ## Base de données
 
